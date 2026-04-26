@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>فَيْضُ الْقُرْآنِ</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1B4D3E">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icon-512.png">
+  <link rel="icon" type="image/png" href="icon-512.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root { --deep-green: #1B4D3E; --gold: #D4AF37; --cream: #FFF8F0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Cairo','Segoe UI',sans-serif; background: linear-gradient(160deg,#F9F6F0 0%,var(--cream) 100%); color: #2D2D2D; line-height: 1.7; min-height: 100vh; padding-bottom: 30px; }
+    .app-container { max-width: 650px; margin: 0 auto; padding: 15px; }
+    .app-header { background: linear-gradient(135deg,var(--deep-green),#0A2F20); color: white; border-radius: 25px; padding: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 10px 30px rgba(27,77,62,0.3); }
+    .app-header h1 { font-size: 2.5rem; color: var(--gold); font-weight: 700; }
+    .cards-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 15px; margin-bottom: 25px; }
+    .card,button,.back-btn,.list-item,.prophet-node,.hadith-header { transition: all 0.3s ease; cursor: pointer; }
+    .card { background: white; border-radius: 20px; padding: 20px 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 1px solid rgba(212,175,55,0.2); }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); border-color: var(--gold); }
+    .card i { font-size: 2rem; color: var(--gold); margin-bottom: 8px; }
+    .card h3 { font-size: 0.95rem; color: var(--deep-green); }
+    button:hover { transform: scale(1.03); opacity: 0.9; }
+    .back-btn:hover { transform: scale(1.05); }
+    .list-item:hover { transform: translateX(-5px); background: #FFF3E0; }
+    .prophet-node:hover { transform: scale(1.04); box-shadow: 0 10px 30px rgba(212,175,55,0.5); border-color: #FFD700; }
+    .hadith-header:hover { background: #FFF3E0; border-radius: 15px; }
+    .section { display: none; background: white; border-radius: 25px; padding: 20px; margin-top: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); animation: fadeIn 0.4s ease; }
+    .section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #F5E6D3; padding-bottom: 12px; position: sticky; top: 0; background: white; z-index: 5; }
+    .section-header h2 { color: var(--deep-green); }
+    .back-btn { background: linear-gradient(135deg,var(--gold),#B8941F); border: none; color: white; padding: 8px 18px; border-radius: 25px; font-weight: bold; }
+    .list-item { background: #FCFAF5; padding: 14px; border-radius: 14px; margin-bottom: 8px; border-right: 4px solid var(--gold); }
+    .quran-page { background: #FFFDF7; border: 2px solid var(--gold); border-radius: 25px; padding: 30px; text-align: center; }
+    .surah-title-inner { background: var(--deep-green); color: var(--gold); padding: 10px; border-radius: 15px; margin-bottom: 20px; display: inline-block; }
+    .bismillah { font-size: 2rem; margin: 15px 0; color: var(--deep-green); }
+    .quran-ayahs { text-align: justify; line-height: 2.8; font-size: 1.4rem; direction: rtl; }
+    .ayah-number { display: inline-block; width: 28px; height: 28px; border: 1.5px solid var(--gold); color: var(--deep-green); border-radius: 50%; text-align: center; line-height: 26px; font-size: 0.75rem; margin: 0 3px; }
+    .hadith-card { background: #FFFDF7; border: 1px solid #F0D78C; border-radius: 18px; padding: 15px; margin-bottom: 12px; }
+    .hadith-header { display: flex; align-items: center; gap: 12px; padding: 5px; }
+    .hadith-number { background: var(--deep-green); color: var(--gold); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+    .hadith-full { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--gold); line-height: 2; }
+    .hadith-full.show { display: block; }
+    .tasbeeh-circle { width: 140px; height: 140px; background: radial-gradient(circle at 30% 30%,#F7E9C3,var(--gold)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 25px auto; font-size: 2.2rem; font-weight: bold; color: var(--deep-green); box-shadow: 0 12px 30px rgba(212,175,55,0.4); cursor: pointer; user-select: none; }
+    .tasbeeh-circle:active { transform: scale(0.9); }
+    .progress-bar { height: 14px; background: #E0E0E0; border-radius: 15px; margin: 15px 0; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg,var(--gold),var(--deep-green)); border-radius: 15px; transition: width 0.5s; }
+    .prophet-node { background: linear-gradient(135deg,#1B4D3E,#0A2F20); color: white; padding: 15px 25px; border-radius: 15px; margin: 10px auto; width: 85%; cursor: pointer; border: 2px solid var(--gold); font-size: 1.1rem; }
+    .prophet-detail { background: #FFFDF7; padding: 15px; border-radius: 12px; margin: 5px auto 12px; width: 90%; border-right: 3px solid var(--gold); display: none; }
+    .prophet-detail.show { display: block; animation: fadeIn 0.3s ease; }
+    .celebration-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; }
+    .celebration-content { background: white; padding: 35px; border-radius: 25px; text-align: center; animation: bounceIn 0.6s; }
+    @keyframes bounceIn { 0%{transform:scale(0.3)} 50%{transform:scale(1.1)} 100%{transform:scale(1)} }
+    .prayer-row { display: flex; justify-content: space-between; padding: 12px 15px; background: #F9F6F0; border-radius: 14px; margin-bottom: 8px; align-items: center; }
+    .prayer-row.next { background: #FFF8E1; border: 2px solid var(--gold); }
+    .signature { text-align: center; padding: 12px; background: rgba(27,77,62,0.03); border-top: 1px solid rgba(212,175,55,0.2); margin-top: 30px; font-size: 0.7rem; }
+    @media (max-width:480px) { .cards-grid { grid-template-columns: repeat(3,1fr); gap: 10px; } .card { padding: 15px 8px; } .card i { font-size: 1.6rem; } .card h3 { font-size: 0.8rem; } }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <header class="app-header"><h1>فَيْضُ الْقُرْآنِ</h1><p style="opacity:0.8;font-size:0.9rem;">وَنُنَزِّلُ مِنَ الْقُرْآنِ مَا هُوَ شِفَاءٌ وَرَحْمَةٌ</p></header>
+
+  <div id="homeScreen">
+    <div class="cards-grid">
+      <div class="card" onclick="navigateTo('quran')"><i class="fas fa-book-open"></i><h3>القرآن</h3></div>
+      <div class="card" onclick="navigateTo('hadith')"><i class="fas fa-scroll"></i><h3>الأحاديث</h3></div>
+      <div class="card" onclick="navigateTo('audio')"><i class="fas fa-play-circle"></i><h3>صوت القرآن</h3></div>
+      <div class="card" onclick="navigateTo('prayer')"><i class="fas fa-mosque"></i><h3>مواقيت الصلاة</h3></div>
+      <div class="card" onclick="navigateTo('seerah')"><i class="fas fa-star-and-crescent"></i><h3>السيرة النبوية</h3></div>
+      <div class="card" onclick="navigateTo('azkar')"><i class="fas fa-hands-praying"></i><h3>الأذكار</h3></div>
+      <div class="card" onclick="navigateTo('wird')"><i class="fas fa-calendar-check"></i><h3>الورد اليومي</h3></div>
+      <div class="card" onclick="navigateTo('ruqyah')"><i class="fas fa-heart"></i><h3>الرقية</h3></div>
+      <div class="card" onclick="navigateTo('stories')"><i class="fas fa-tree"></i><h3>شجرة الأنبياء</h3></div>
+    </div>
+    <div style="text-align:center;margin:20px 0;">
+      <button onclick="sendSalawat()" style="background:linear-gradient(135deg,#D4AF37,#B8941F);color:white;border:none;padding:14px 30px;border-radius:30px;font-size:1.1rem;font-weight:bold;">ﷺ اللهم صلِّ على محمد ﷺ</button>
+      <div id="salawatCounter" style="margin-top:8px;color:var(--deep-green);">عدد الصلوات: 0</div>
+      <button onclick="resetSalawat()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);padding:5px 15px;border-radius:20px;font-size:0.75rem;margin-top:5px;">🔄 تصفير</button>
+    </div>
+  </div>
+
+  <div class="celebration-overlay" id="celebration">
+    <div class="celebration-content">
+      <i class="fas fa-trophy" style="font-size:4rem;color:#D4AF37;"></i>
+      <h2 style="color:#1B4D3E;margin:15px 0;">ما شاء الله! 🎉</h2>
+      <p>انتهيت من الورد اليومي</p>
+      <button onclick="closeCelebration()" style="background:#D4AF37;border:none;padding:10px 25px;border-radius:20px;margin-top:15px;font-weight:bold;">الحمد لله</button>
+    </div>
+  </div>
+
+  <div id="quranSection" class="section"><div class="section-header"><h2>القرآن الكريم</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div id="surahList"></div><div id="surahContent" style="display:none;"></div></div>
+  <div id="hadithSection" class="section"><div class="section-header"><h2>الأحاديث</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div id="hadithContainer"></div></div>
+  <div id="audioSection" class="section"><div class="section-header"><h2>صوت القرآن - عبدالباسط</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><select id="audioSurahSelect" onchange="updateAudioSrc()" style="width:100%;padding:12px;border-radius:30px;margin-bottom:15px;"></select><audio id="audioPlayer" controls style="width:100%;"></audio></div>
+  
+  <div id="prayerSection" class="section">
+    <div class="section-header"><h2>🕌 مواقيت الصلاة</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div>
+    <div id="hijriBox" style="background:linear-gradient(135deg,#1B4D3E,#0A2F20);color:white;padding:15px;border-radius:18px;text-align:center;margin-bottom:15px;"><div style="font-size:2.5rem;font-weight:bold;color:#D4AF37;" id="hijriDay">--</div><div id="hijriMonthYear">---</div></div>
+    <div id="prayerTimesList"></div>
+    <div id="nextPrayerBox" style="margin-top:15px;"></div>
+  </div>
+  
+  <div id="seerahSection" class="section"><div class="section-header"><h2>السيرة النبوية</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div id="seerahNav" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:15px;"></div><div id="seerahContent" style="background:#FFFDF7;padding:18px;border-radius:18px;line-height:2.2;border-right:4px solid var(--gold);"></div></div>
+  <div id="azkarSection" class="section"><div class="section-header"><h2>الأذكار والسبحة</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div style="text-align:center;color:var(--gold);font-size:1.1rem;margin-bottom:15px;">⚜️ أذكارك حصنك ⚜️</div><div style="display:flex;gap:8px;margin-bottom:15px;"><button onclick="showAzkarType('morning')" style="flex:1;padding:10px;background:var(--deep-green);color:white;border:none;border-radius:20px;">صباح</button><button onclick="showAzkarType('evening')" style="flex:1;padding:10px;background:var(--gold);border:none;border-radius:20px;">مساء</button><button onclick="showAzkarType('afterPrayer')" style="flex:1;padding:10px;background:#5A4A42;color:white;border:none;border-radius:20px;">بعد الصلاة</button></div><div id="azkarText"></div><div style="text-align:center;"><div class="tasbeeh-circle" id="tasbeehCircle" onclick="incrementTasbeeh()">0</div><button onclick="resetTasbeeh()" style="background:var(--deep-green);color:white;border:none;padding:10px 20px;border-radius:25px;">🔄 تصفير</button></div></div>
+  <div id="wirdSection" class="section"><div class="section-header"><h2>الورد اليومي</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div id="dailyTasks"></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><p id="progressText">0% مكتمل</p></div>
+  <div id="ruqyahSection" class="section"><div class="section-header"><h2>الرقية الشرعية</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div id="ruqyahContent"></div></div>
+  <div id="storiesSection" class="section"><div class="section-header"><h2>شجرة الأنبياء والمرسلين</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div id="prophetsTree" style="text-align:center;"></div></div>
+
+  <div class="signature">
+    <p style="margin:0;color:var(--deep-green);">تطبيق <strong style="color:var(--gold);">فَيْضُ الْقُرْآنِ</strong></p>
+    <p style="margin:2px 0;color:#888;font-size:0.55rem;font-style:italic;">by <strong>Eng. Helmy Ashraf Ahmed Mazen</strong></p>
+    <p style="margin:2px 0;color:#aaa;font-size:0.55rem;">© 2026 جميع الحقوق محفوظة</p>
+  </div>
+</div>
+
+<script>
+const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+const meccanSurahs = {1:true,2:false,3:false,4:false,5:false,6:true,7:true,8:false,9:false,10:true,11:true,12:true,13:true,14:true,15:true,16:true,17:true,18:true,19:true,20:true,21:true,22:true,23:true,24:false,25:true,26:true,27:true,28:true,29:true,30:true,31:true,32:true,33:false,34:true,35:true,36:true,37:true,38:true,39:true,40:true,41:true,42:true,43:true,44:true,45:true,46:true,47:false,48:false,49:false,50:true,51:true,52:true,53:true,54:true,55:true,56:true,57:false,58:false,59:false,60:false,61:false,62:false,63:false,64:false,65:false,66:false,67:true,68:true,69:true,70:true,71:true,72:true,73:true,74:true,75:true,76:true,77:true,78:true,79:true,80:true,81:true,82:true,83:true,84:true,85:true,86:true,87:true,88:true,89:true,90:true,91:true,92:true,93:true,94:true,95:true,96:true,97:true,98:false,99:false,100:true,101:true,102:true,103:true,104:true,105:true,106:true,107:true,108:true,109:true,110:false,111:true,112:true,113:true,114:true};
+
+const hadithList = [
+  {n:1,t:"عن أمير المؤمنين عمر بن الخطاب رضي الله عنه قال: سمعت رسول الله صلى الله عليه وسلم يقول: «إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى...» رواه البخاري ومسلم."},
+  {n:2,t:"عن عمر رضي الله عنه أيضاً قال: بينما نحن جلوس عند رسول الله صلى الله عليه وسلم... حديث جبريل. رواه مسلم."},
+  {n:3,t:"عن ابن عمر رضي الله عنهما قال: «بني الإسلام على خمس...» رواه البخاري ومسلم."},
+  {n:4,t:"عن ابن مسعود رضي الله عنه: «إن أحدكم يجمع خلقه في بطن أمه...» رواه البخاري ومسلم."},
+  {n:5,t:"عن عائشة رضي الله عنها: «من أحدث في أمرنا هذا ما ليس منه فهو رد». رواه البخاري ومسلم."},
+  {n:6,t:"عن النعمان بن بشير: «إن الحلال بين، وإن الحرام بين...» رواه البخاري ومسلم."},
+  {n:7,t:"عن تميم الداري: «الدين النصيحة». رواه مسلم."},
+  {n:8,t:"عن ابن عمر: «أمرت أن أقاتل الناس...» رواه البخاري ومسلم."},
+  {n:9,t:"عن أبي هريرة: «ما نهيتكم عنه فاجتنبوه...» رواه البخاري ومسلم."},
+  {n:10,t:"عن أبي هريرة: «إن الله طيب لا يقبل إلا طيباً...» رواه مسلم."},
+  {n:11,t:"عن الحسن بن علي: «دع ما يريبك إلى ما لا يريبك». رواه الترمذي."},
+  {n:12,t:"عن أبي هريرة: «من حسن إسلام المرء تركه ما لا يعنيه». رواه الترمذي."},
+  {n:13,t:"عن أنس: «لا يؤمن أحدكم حتى يحب لأخيه ما يحب لنفسه». رواه البخاري ومسلم."},
+  {n:14,t:"عن ابن مسعود: «لا يحل دم امرئ مسلم إلا بإحدى ثلاث...» رواه البخاري ومسلم."},
+  {n:15,t:"عن أبي هريرة: «من كان يؤمن بالله واليوم الآخر فليقل خيراً أو ليصمت...» رواه البخاري ومسلم."},
+  {n:16,t:"عن أبي هريرة: أوصني قال: «لا تغضب». رواه البخاري."},
+  {n:17,t:"عن شداد بن أوس: «إن الله كتب الإحسان على كل شيء...» رواه مسلم."},
+  {n:18,t:"عن أبي ذر ومعاذ: «اتق الله حيثما كنت...» رواه الترمذي."},
+  {n:19,t:"عن ابن عباس: «يا غلام إني أعلمك كلمات...» رواه الترمذي."},
+  {n:20,t:"عن أبي مسعود: «إذا لم تستح فاصنع ما شئت». رواه البخاري."},
+  {n:21,t:"عن سفيان بن عبد الله: «قل آمنت بالله ثم استقم». رواه مسلم."},
+  {n:22,t:"عن جابر: سأل رجل... قال: «نعم». رواه مسلم."},
+  {n:23,t:"عن أبي مالك الأشعري: «الطهور شطر الإيمان...» رواه مسلم."},
+  {n:24,t:"عن أبي ذر: «يا عبادي إني حرمت الظلم على نفسي...» رواه مسلم."},
+  {n:25,t:"عن أبي ذر: «ذهب أهل الدثور بالأجور...» رواه مسلم."},
+  {n:26,t:"عن أبي هريرة: «كل سلامى من الناس عليه صدقة...» رواه البخاري ومسلم."},
+  {n:27,t:"عن النواس بن سمعان: «البر حسن الخلق...» رواه مسلم."},
+  {n:28,t:"عن العرباض بن سارية: «أوصيكم بتقوى الله...» رواه أبو داود."},
+  {n:29,t:"عن معاذ: «رأس الأمر الإسلام...» رواه الترمذي."},
+  {n:30,t:"عن أبي ثعلبة: «إن الله فرض فرائض...» رواه الدارقطني."},
+  {n:31,t:"عن سهل بن سعد: «ازهد في الدنيا يحبك الله...» رواه ابن ماجه."},
+  {n:32,t:"عن أبي سعيد الخدري: «لا ضرر ولا ضرار». رواه ابن ماجه."},
+  {n:33,t:"عن ابن عباس: «لو يعطى الناس بدعواهم...» رواه البيهقي."},
+  {n:34,t:"عن أبي سعيد: «من رأى منكم منكراً فليغيره...» رواه مسلم."},
+  {n:35,t:"عن أبي هريرة: «لا تحاسدوا، ولا تناجشوا، ولا تباغضوا...» رواه مسلم."},
+  {n:36,t:"عن أبي هريرة: «من نفس عن مؤمن كربة...» رواه مسلم."},
+  {n:37,t:"عن ابن عباس: «إن الله كتب الحسنات والسيئات...» رواه البخاري ومسلم."},
+  {n:38,t:"عن أبي هريرة: «من عادى لي ولياً فقد آذنته بالحرب...» رواه البخاري."},
+  {n:39,t:"عن ابن عباس: «إن الله تجاوز لي عن أمتي الخطأ والنسيان...» رواه ابن ماجه."},
+  {n:40,t:"عن ابن عمر: «كن في الدنيا كأنك غريب أو عابر سبيل». رواه البخاري."},
+  {n:41,t:"عن عبد الله بن عمرو: «لا يؤمن أحدكم حتى يكون هواه تبعاً لما جئت به». حديث حسن."},
+  {n:42,t:"عن أنس: «قال الله تعالى: يا ابن آدم، إنك ما دعوتني ورجوتني غفرت لك...» رواه الترمذي."}
+];
+const seerahData = {
+  "نسبه": `<h3>📜 نسبه صلى الله عليه وسلم</h3>
+<p>هو <span class="highlight" style="color:#B8941F;font-weight:bold;">محمد بن عبد الله بن عبد المطلب بن هاشم بن عبد مناف بن قصي بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر</span> (وهو قريش). وينتهي نسبه إلى <span class="highlight" style="color:#B8941F;font-weight:bold;">إسماعيل بن إبراهيم</span> عليهما السلام. أمه: <span class="highlight" style="color:#B8941F;font-weight:bold;">آمنة بنت وهب</span>. أبوه: <span class="highlight" style="color:#B8941F;font-weight:bold;">عبد الله بن عبد المطلب</span> توفي قبل ولادته.</p>`,
+
+  "المولد": `<h3>🌙 المولد النبوي الشريف</h3>
+<p>وُلد صلى الله عليه وسلم <span class="highlight" style="color:#B8941F;font-weight:bold;">يوم الاثنين في ربيع الأول عام الفيل</span> (571م) بمكة المكرمة. من أحداث مولده: ارتجاج إيوان كسرى، انطفاء نار فارس. أرضعته <span class="highlight" style="color:#B8941F;font-weight:bold;">حليمة السعدية</span>.</p>`,
+
+  "الطفولة": `<h3>👶 طفولته</h3>
+<p><span class="highlight" style="color:#B8941F;font-weight:bold;">شق الصدر:</span> أتاه جبريل وميكائيل فشقا صدره وغسلاه بماء زمزم. توفيت أمه وعمره 6 سنوات، ثم كفله جده <span class="highlight" style="color:#B8941F;font-weight:bold;">عبد المطلب</span> وعمره 8 سنوات كفله عمه <span class="highlight" style="color:#B8941F;font-weight:bold;">أبو طالب</span>.</p>`,
+
+  "الشباب": `<h3>💼 شبابه</h3>
+<p>اشتغل بالتجارة ولُقب <span class="highlight" style="color:#B8941F;font-weight:bold;">بالصادق الأمين</span>. تزوج <span class="highlight" style="color:#B8941F;font-weight:bold;">خديجة</span> وعمره 25 سنة. شارك في حلف الفضول وبناء الكعبة ووضع الحجر الأسود.</p>`,
+
+  "البعثة": `<h3>📖 البعثة</h3>
+<p>نزل الوحي في <span class="highlight" style="color:#B8941F;font-weight:bold;">غار حراء</span> وعمره 40 سنة. أول ما نزل: ﴿اقْرَأْ بِاسْمِ رَبِّكَ﴾. الدعوة السرية 3 سنوات ثم الجهر. الهجرة للمدينة سنة 13 للبعثة.</p>`,
+
+  "الأبناء": `<h3>👨‍👩‍👧 أبناؤه</h3>
+<p>الذكور: القاسم، عبد الله، إبراهيم. الإناث: زينب، رقية، أم كلثوم، <span class="highlight" style="color:#B8941F;font-weight:bold;">فاطمة</span> سيدة نساء العالمين.</p>`,
+
+  "الزوجات": `<h3>💍 زوجاته</h3>
+<p>خديجة، سودة، عائشة، حفصة، زينب بنت خزيمة، أم سلمة، زينب بنت جحش، جويرية، أم حبيبة، صفية، ميمونة. وجاريتان: مارية وريحانة.</p>`,
+
+  "الغزوات": `<h3>⚔️ الغزوات</h3>
+<p>27 غزوة. أشهرها: <span class="highlight" style="color:#B8941F;font-weight:bold;">بدر</span> (2 هـ)، <span class="highlight" style="color:#B8941F;font-weight:bold;">أحد</span> (3 هـ)، الخندق (5 هـ)، <span class="highlight" style="color:#B8941F;font-weight:bold;">فتح مكة</span> (8 هـ) وقال: "اذهبوا فأنتم الطلقاء".</p>`,
+
+  "الأخلاق": `<h3>✨ أخلاقه</h3>
+<p>كان خلقه القرآن. الصدق، التواضع، الكرم، الحلم، الرحمة، الشجاعة. مات ودرعه مرهونة عند يهودي.</p>`,
+
+  "الوفاة": `<h3>🕊️ وفاته</h3>
+<p>توفي <span class="highlight" style="color:#B8941F;font-weight:bold;">12 ربيع الأول 11 هـ</span> عن 63 سنة. آخر كلماته: <span class="highlight" style="color:#B8941F;font-weight:bold;">"الصلاة الصلاة"</span> و<span class="highlight" style="color:#B8941F;font-weight:bold;">"اللهم الرفيق الأعلى"</span>. دفن في حجرة عائشة.</p>`
+};
+
+
+const prophetsFullData = {
+  "آدم":{f:null,t:"أبو البشر",d:"أول الأنبياء. خلقه الله بيده ونفخ فيه من روحه."},
+  "إدريس":{f:null,t:"أول نبي بعد آدم",d:"رفعه الله مكاناً علياً."},
+  "نوح":{f:null,t:"أول الرسل",d:"لبث في قومه 950 سنة."},
+  "هود":{f:null,t:"نبي عاد",d:"أرسل إلى قوم عاد."},
+  "صالح":{f:null,t:"نبي ثمود",d:"أرسل إلى ثمود."},
+  "إبراهيم":{f:null,t:"خليل الله",d:"أبو الأنبياء. حطم الأصنام."},
+  "لوط":{f:null,t:"ابن أخي إبراهيم",d:"أرسل إلى قوم لوط."},
+  "إسماعيل":{f:"إبراهيم",t:"الذبيح",d:"ابن إبراهيم. فجر الله له زمزم."},
+  "إسحاق":{f:"إبراهيم",t:"ابن إبراهيم",d:"بشرت به الملائكة."},
+  "يعقوب":{f:"إسحاق",t:"إسرائيل",d:"له 12 ولداً منهم يوسف."},
+  "يوسف":{f:"يعقوب",t:"الصديق",d:"أوتي شطر الحسن. أصبح عزيز مصر."},
+  "أيوب":{f:null,t:"نبي الصبر",d:"ابتلي فصبر."},
+  "شعيب":{f:null,t:"خطيب الأنبياء",d:"أرسل إلى مدين."},
+  "موسى":{f:null,t:"كليم الله",d:"أرسل إلى فرعون."},
+  "هارون":{f:null,t:"أخو موسى",d:"كان فصيحاً."},
+  "داود":{f:null,t:"نبي وملك",d:"أنزل عليه الزبور."},
+  "سليمان":{f:"داود",t:"الملك النبي",d:"سخرت له الريح والجن."},
+  "يونس":{f:null,t:"ذي النون",d:"التقمه الحوت."},
+  "زكريا":{f:null,t:"كفل مريم",d:"بشر بيحيى."},
+  "يحيى":{f:"زكريا",t:"النبي",d:"لم يُجعل له من قبل سمياً."},
+  "عيسى":{f:null,t:"روح الله",d:"خلق من غير أب."},
+  "محمد ﷺ":{f:null,t:"خاتم الأنبياء",d:". صاحب الشفاعة العظمي ",s:true}
+};
+
+const azkarData = {
+  morning:["أصبحنا وأصبح الملك لله","اللهم بك أصبحنا وبك أمسينا","اللهم أنت ربي لا إله إلا أنت","سبحان الله وبحمده (100)","لا إله إلا الله وحده لا شريك له (10)","اللهم إني أسألك علماً نافعاً"],
+  evening:["أمسينا وأمسى الملك لله","اللهم بك أمسينا وبك أصبحنا","أعوذ بكلمات الله التامات (3)","سبحان الله وبحمده (100)"],
+  afterPrayer:["أستغفر الله (3)","اللهم أنت السلام ومنك السلام","سبحان الله (33) الحمد لله (33) الله أكبر (33)","آية الكرسي","الإخلاص والمعوذات"]
+};
+
+let tasbeehCount = +(localStorage.getItem('tc')||0);
+let salawatCount = +(localStorage.getItem('sc')||0);
+let activeProphet = null;
+let activeHadith = null;
+let prayerTimer = null;
+
+function navigateTo(id) {
+  document.getElementById('homeScreen').style.display='none';
+  ['quran','hadith','audio','prayer','seerah','azkar','wird','ruqyah','stories'].forEach(s=>{let el=document.getElementById(s+'Section');if(el)el.classList.remove('active');});
+  let t=document.getElementById(id+'Section');if(t)t.classList.add('active');
+  if(id==='quran')renderSurahList();
+  if(id==='hadith')renderHadith();
+  if(id==='audio')initAudio();
+  if(id==='prayer')startPrayers();
+  if(id==='seerah')initSeerah();
+  if(id==='azkar'){updateTasbeeh();showAzkarType('morning');}
+  if(id==='wird')renderTasks();
+  if(id==='ruqyah')renderRuqyah();
+  if(id==='stories')renderProphets();
+}
+function goHome(){document.getElementById('homeScreen').style.display='block';['quran','hadith','audio','prayer','seerah','azkar','wird','ruqyah','stories'].forEach(s=>{let el=document.getElementById(s+'Section');if(el)el.classList.remove('active');});if(prayerTimer){clearInterval(prayerTimer);prayerTimer=null;}}
+
+function renderSurahList(){document.getElementById('surahList').style.display='block';document.getElementById('surahContent').style.display='none';document.getElementById('surahList').innerHTML=surahNames.map((n,i)=>`<div class="list-item" onclick="showSurah(${i+1})">${i+1}. ${n} <span style="background:${meccanSurahs[i+1]?'#8B6914':'#1B4D3E'};color:white;padding:2px 10px;border-radius:12px;font-size:0.7rem;">${meccanSurahs[i+1]?'مكية':'مدنية'}</span></div>`).join('');}
+async function showSurah(i){document.getElementById('surahList').style.display='none';let c=document.getElementById('surahContent');c.style.display='block';c.innerHTML='جاري التحميل...';try{let r=await fetch(`https://api.alquran.cloud/v1/surah/${i}/quran-uthmani`),d=await r.json();let ay=d.data.ayahs.map(a=>`${a.text} <span class="ayah-number">${a.numberInSurah}</span>`).join(' ');c.innerHTML=`<div class="quran-page"><div class="surah-title-inner">سورة ${surahNames[i-1]}</div><div class="bismillah">﷽</div><div class="quran-ayahs">${ay}</div></div><button onclick="renderSurahList()" style="margin-top:15px;background:#1B4D3E;color:white;border:none;padding:12px;border-radius:25px;width:100%;">عودة للفهرس</button>`;}catch{c.innerHTML='تعذر التحميل';}}
+
+function renderHadith(){document.getElementById('hadithContainer').innerHTML=hadithList.map((h,i)=>`<div class="hadith-card"><div class="hadith-header" onclick="toggleHadith(${i})"><div class="hadith-number">${h.n}</div><span>${h.t.substring(0,60)}...</span><i class="fas fa-chevron-down" style="margin-right:auto;color:var(--gold);"></i></div><div class="hadith-full" id="hadithFull-${i}">${h.t}</div></div>`).join('');activeHadith=null;}
+function toggleHadith(i){let el=document.getElementById('hadithFull-'+i);if(activeHadith!==null&&activeHadith!==i){let prev=document.getElementById('hadithFull-'+activeHadith);if(prev)prev.classList.remove('show');}if(el){el.classList.toggle('show');activeHadith=el.classList.contains('show')?i:null;}}
+
+function initAudio(){let s=document.getElementById('audioSurahSelect');s.innerHTML=surahNames.map((n,i)=>`<option value="${i+1}">${n}</option>`).join('');updateAudioSrc();}
+function updateAudioSrc(){let s=document.getElementById('audioSurahSelect').value.padStart(3,'0');document.getElementById('audioPlayer').src=`https://download.quranicaudio.com/quran/abdul_basit_murattal/${s}.mp3`;}
+
+function startPrayers(){
+  updateHijri();
+  let times={Fajr:'04:30',Dhuhr:'12:00',Asr:'15:30',Maghrib:'18:15',Isha:'19:45'};
+  let names={Fajr:'الفجر',Dhuhr:'الظهر',Asr:'العصر',Maghrib:'المغرب',Isha:'العشاء'};
+  document.getElementById('prayerTimesList').innerHTML=Object.entries(times).map(([k,v])=>`<div class="prayer-row" id="row-${k}"><span>${names[k]}</span><span>${v}</span></div>`).join('');
+  if(prayerTimer)clearInterval(prayerTimer);
+  updateCountdown();
+  prayerTimer=setInterval(updateCountdown,1000);
+}
+
+function updateHijri(){
+  let d=new Date();
+  let jd=Math.floor(d.getTime()/86400000+2440587.5);
+  let l=jd-1948440+10632,n=Math.floor((l-1)/10631),l2=l-10631*n+354;
+  let j=Math.floor((10985-l2)/5316)*Math.floor(50*l2/17719)+Math.floor(l2/5670)*Math.floor(43*l2/15238);
+  let l3=l2-Math.floor((30-j)/15)*Math.floor(17719*j/50)-Math.floor(j/16)*Math.floor(15238*j/43)+29;
+  let m=Math.floor(24*l3/709),day=Math.floor(l3-Math.floor(709*m/24)),y=30*n+j-30;
+  let months=["محرم","صفر","ربيع الأول","ربيع الآخر","جمادى الأولى","جمادى الآخرة","رجب","شعبان","رمضان","شوال","ذو القعدة","ذو الحجة"];
+  document.getElementById('hijriDay').textContent=day;
+  document.getElementById('hijriMonthYear').textContent=months[m-1]+' '+y+' هـ';
+}
+
+function updateCountdown(){
+  let now=new Date();
+  let times={fajr:'04:30',dhuhr:'12:00',asr:'15:30',maghrib:'18:15',isha:'19:45'};
+  let names={fajr:'الفجر',dhuhr:'الظهر',asr:'العصر',maghrib:'المغرب',isha:'العشاء'};
+  let nk=null,nt=null,nn='';
+  document.querySelectorAll('.prayer-row').forEach(r=>r.classList.remove('next'));
+  for(let[k,v] of Object.entries(times)){
+    let[h,m]=v.split(':').map(Number),d=new Date(now);d.setHours(h,m,0,0);
+    if(d<=now)d.setDate(d.getDate()+1);
+    if(!nt||d<nt){nt=d;nk=k;nn=names[k];}
+  }
+  if(nt){
+    let diff=Math.floor((nt-now)/1000);
+    document.getElementById('nextPrayerBox').innerHTML=`<div style="background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(27,77,62,0.1));border:2px solid var(--gold);border-radius:20px;padding:18px;text-align:center;"><p>الصلاة القادمة ⏳</p><h3 style="color:#1B4D3E;">${nn}</h3><div style="font-size:2rem;font-weight:bold;color:#1B4D3E;">${String(Math.floor(diff/3600)).padStart(2,'0')}:${String(Math.floor((diff%3600)/60)).padStart(2,'0')}:${String(diff%60).padStart(2,'0')}</div></div>`;
+    let row=document.getElementById('row-'+(nk.charAt(0).toUpperCase()+nk.slice(1)));
+    if(row)row.classList.add('next');
+  }
+}
+
+function initSeerah(){let keys=Object.keys(seerahData);document.getElementById('seerahNav').innerHTML=keys.map(k=>`<button onclick="showSeerah('${k}')" style="padding:8px;border:2px solid var(--gold);background:white;border-radius:18px;font-weight:bold;color:var(--deep-green);">${k}</button>`).join('');showSeerah(keys[0]);}
+function showSeerah(k){document.getElementById('seerahContent').innerHTML=seerahData[k];}
+
+function showAzkarType(t){document.getElementById('azkarText').innerHTML=azkarData[t].map(z=>`<div style="background:#FFFDF7;padding:12px;border-radius:14px;margin-bottom:8px;border-right:4px solid var(--gold);">📿 ${z}</div>`).join('');}
+function incrementTasbeeh(){tasbeehCount++;localStorage.setItem('tc',tasbeehCount);updateTasbeeh();}
+function resetTasbeeh(){tasbeehCount=0;localStorage.setItem('tc','0');updateTasbeeh();}
+function updateTasbeeh(){document.getElementById('tasbeehCircle').innerText=tasbeehCount;}
+
+function renderTasks(){let tasks=['قراءة ورد من القرآن','أذكار الصباح والمساء','صلاة الفروض الخمسة','صلاة الضحى','الدعاء والاستغفار'];document.getElementById('dailyTasks').innerHTML=tasks.map((t,i)=>`<label style="display:flex;align-items:center;gap:10px;background:#F9F6F0;padding:12px;border-radius:14px;margin-bottom:8px;"><input type="checkbox" onchange="checkWird()"> ${t}</label>`).join('');updateWird();}
+function checkWird(){
+  let done=document.querySelectorAll('#dailyTasks input:checked').length;
+  let p=Math.round((done/5)*100);
+  document.getElementById('progressFill').style.width=p+'%';
+  document.getElementById('progressText').innerText=p+'% مكتمل';
+  if(p===100){
+    setTimeout(()=>{
+      document.getElementById('celebration').style.display='flex';
+    },300);
+  }
+}
+function updateWird(){document.getElementById('progressFill').style.width='0%';document.getElementById('progressText').innerText='0% مكتمل';}
+
+function renderRuqyah(){document.getElementById('ruqyahContent').innerHTML=`<div style="background:#FFF9EB;padding:18px;border-radius:15px;margin-bottom:15px;"><h4>📖 سورة الفاتحة</h4><p style="line-height:2.5;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ (1) الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ (2) الرَّحْمَٰنِ الرَّحِيمِ (3) مَالِكِ يَوْمِ الدِّينِ (4) إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ (5) اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ (6) صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ (7)</p></div><div style="background:#FFF9EB;padding:18px;border-radius:15px;margin-bottom:15px;"><h4>📖 آية الكرسي</h4><p style="line-height:2.5;">اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ</p></div><div style="background:#FFF9EB;padding:18px;border-radius:15px;"><h4>📖 المعوذات</h4><p style="line-height:2.5;">قُلْ هُوَ اللَّهُ أَحَدٌ... قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ... قُلْ أَعُوذُ بِرَبِّ النَّاسِ...</p></div>`;}
+
+function renderProphets(){let html='';for(let[name,data] of Object.entries(prophetsFullData)){html+=`<div onclick="toggleProphet('${name}')" class="prophet-node" style="${data.s?'font-size:1.2rem;font-weight:bold;background:linear-gradient(135deg,#B8941F,#D4AF37);':''}">${name} عليه السلام<br><small>${data.t||''}</small></div><div class="prophet-detail" id="detail-${name}"><p>${data.d}</p>${data.f?`<p style="margin-top:5px;"><strong>والده:</strong> ${data.f} عليه السلام</p>`:''}</div>`;}document.getElementById('prophetsTree').innerHTML=html;}
+function toggleProphet(name){let el=document.getElementById('detail-'+name);if(activeProphet&&activeProphet!==name){let prev=document.getElementById('detail-'+activeProphet);if(prev)prev.classList.remove('show');}if(el){el.classList.toggle('show');activeProphet=el.classList.contains('show')?name:null;}}
+
+function sendSalawat(){salawatCount++;localStorage.setItem('sc',salawatCount);updateSalawatDisplay();}
+function resetSalawat(){salawatCount=0;localStorage.setItem('sc','0');updateSalawatDisplay();}
+function updateSalawatDisplay(){document.getElementById('salawatCounter').textContent='عدد الصلوات: '+salawatCount;}
+function closeCelebration(){
+  document.getElementById('celebration').style.display='none';
+  document.querySelectorAll('#dailyTasks input').forEach(cb=>cb.checked=false);
+  document.getElementById('progressFill').style.width='0%';
+  document.getElementById('progressText').innerText='0% مكتمل';
+}
+
+updateTasbeeh();updateSalawatDisplay();
+</script>
+</body>
+</html>
