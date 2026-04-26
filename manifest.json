@@ -1,7 +1,7 @@
 {
   "name": "فَيْضُ الْقُرْآنِ",
-  "short_name": "فيض القرآن",
-  "start_url": "/فيض-القرآن/",
+  "short_name": "فَيْضُ الْقُرْآنِ",
+  "start_url": "/fayd-alquran/",
   "display": "standalone",
   "background_color": "#1B4D3E",
   "theme_color": "#1B4D3E",
@@ -12,7 +12,14 @@
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
