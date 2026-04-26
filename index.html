@@ -481,8 +481,49 @@ function renderSurahList(f=''){
     return `<div class="list-item" onclick="showSurah(${i})">${i}. ${n} ${b}</div>`;
   }).join('');
 }
-function filterSurahs(){renderSurahList(document.getElementById('surahSearch').value)}
+async function loadQuranData() {
+  if (quranData) return quranData;
+  try {
+    let r = await fetch('quran.json');
+    quranData = await r.json();
+    return quranData;
+  } catch(e) {
+    return null;
+  }
+}
+
 async function showSurah(i){
+  document.getElementById('surahList').style.display='none'; 
+  let c=document.getElementById('surahContent');
+  c.style.display='block'; c.innerHTML='جاري التحميل...';
+  
+  try{
+    let data = await loadQuranData();
+    if (!data) throw new Error('No data');
+    
+    let surah = data.find(s => s.id === i);
+    if (!surah) throw new Error('Surah not found');
+    
+    let b = meccanSurahs[i] ? 'مكية' : 'مدنية';
+    let bc = meccanSurahs[i] ? 'mecca-badge' : 'medina-badge';
+    
+    let ay = surah.verses.map(v => `${v.text} <span class="quran-ayah-number">${v.id}</span>`).join(' ');
+    
+    c.innerHTML = `<div class="quran-page"><div class="surah-title-inner">سورة ${surah.name} <span class="surah-badge ${bc}">${b}</span></div><div class="bismillah">﷽</div><div class="quran-ayahs">${ay}</div></div><button onclick="renderSurahList()" style="margin-top:15px;background:#1B4D3E;color:white;border:none;padding:12px;border-radius:25px;width:100%;">عودة للفهرس</button>`;
+  } catch {
+    try {
+      let r = await fetch(`https://api.alquran.cloud/v1/surah/${i}/quran-uthmani`);
+      let d = await r.json();
+      let b = meccanSurahs[i] ? 'مكية' : 'مدنية';
+      let bc = meccanSurahs[i] ? 'mecca-badge' : 'medina-badge';
+      let ay = d.data.ayahs.map(a => `${a.text} <span class="quran-ayah-number">${a.numberInSurah}</span>`).join(' ');
+      c.innerHTML = `<div class="quran-page"><div class="surah-title-inner">سورة ${surahNames[i-1]} <span class="surah-badge ${bc}">${b}</span></div><div class="bismillah">﷽</div><div class="quran-ayahs">${ay}</div></div><button onclick="renderSurahList()" style="margin-top:15px;background:#1B4D3E;color:white;border:none;padding:12px;border-radius:25px;width:100%;">عودة للفهرس</button>`;
+    } catch {
+      c.innerHTML = 'تعذر تحميل السورة. تأكد من اتصالك بالإنترنت.';
+    }
+  }
+}
+{
   document.getElementById('surahList').style.display='none'; let c=document.getElementById('surahContent');
   c.style.display='block'; c.innerHTML='جاري التحميل...';
   try{
@@ -560,7 +601,123 @@ function updateHijri(){
   document.getElementById('hijriMonthYear').textContent=`${hijriMonths[m-1]||hijriMonths[0]} ${y}`;
 }
 
-async function getPrayers(){
+{
+    function getPrayers(){
+  try{
+    // الموقع الافتراضي: القاهرة
+    let lat = +(localStorage.getItem('prayer_lat') || '30.0444');
+    let lon = +(localStorage.getItem('prayer_lon') || '31.2357');
+    
+    // محاولة الحصول على الموقع الحقيقي
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          lat = pos.coords.latitude;
+          lon = pos.coords.longitude;
+          localStorage.setItem('prayer_lat', lat);
+          localStorage.setItem('prayer_lon', lon);
+          calculatePrayerTimes(lat, lon);
+        },
+        () => {
+          calculatePrayerTimes(lat, lon);
+        },
+        { timeout: 5000 }
+      );
+    } else {
+      calculatePrayerTimes(lat, lon);
+    }
+  } catch(e) {
+    document.getElementById('prayerTimesList').innerHTML = '<p style="text-align:center;">تعذر حساب المواقيت</p>';
+  }
+}
+
+function calculatePrayerTimes(lat, lon) {
+  let today = new Date();
+  let times = getPrayerTimesByMath(today, lat, lon);
+  displayPrayers(times);
+  updateNext();
+  if (prayerTimer) clearInterval(prayerTimer);
+  prayerTimer = setInterval(updateNext, 1000);
+}
+
+function getPrayerTimesByMath(date, lat, lon) {
+  // تحويل التاريخ لليوم الجولياني
+  let jd = (date.getTime() / 86400000) + 2440587.5;
+  let d = jd - 2451545.0;
+  
+  // حساب موقع الشمس
+  let g = (357.529 + 0.98560028 * d) % 360;
+  let q = (280.459 + 0.98564736 * d) % 360;
+  let L = (q + 1.915 * Math.sin(g * Math.PI / 180) + 0.020 * Math.sin(2 * g * Math.PI / 180)) % 360;
+  
+  // ميل الشمس
+  let e = 23.439 - 0.00000036 * d;
+  let dec = Math.asin(Math.sin(e * Math.PI / 180) * Math.sin(L * Math.PI / 180)) * 180 / Math.PI;
+  
+  // وقت الظهر
+  let noon = 12 + (lon - q) / 15;
+  
+  // حساب أوقات الصلاة
+  let fajrAngle = -19.5;
+  let ishaAngle = -17.5;
+  
+  let fajr = computeTime(noon, fajrAngle, dec, lat);
+  let sunrise = computeTime(noon, -0.833, dec, lat);
+  let dhuhr = noon;
+  let asr = computeAsr(noon, dec, lat);
+  let maghrib = computeTime(noon, -0.833, dec, lat, true);
+  let isha = computeTime(noon, ishaAngle, dec, lat, true);
+  
+  return {
+    Fajr: formatTime(fajr),
+    Dhuhr: formatTime(dhuhr),
+    Asr: formatTime(asr),
+    Maghrib: formatTime(maghrib),
+    Isha: formatTime(isha)
+  };
+}
+
+function computeTime(noon, angle, dec, lat, isAfterNoon = false) {
+  let decRad = dec * Math.PI / 180;
+  let latRad = lat * Math.PI / 180;
+  let angleRad = angle * Math.PI / 180;
+  
+  let cosHour = (Math.sin(angleRad) - Math.sin(latRad) * Math.sin(decRad)) / (Math.cos(latRad) * Math.cos(decRad));
+  cosHour = Math.max(-1, Math.min(1, cosHour));
+  
+  let hour = Math.acos(cosHour) * 180 / Math.PI / 15;
+  
+  if (isAfterNoon) {
+    return noon + hour;
+  } else {
+    return noon - hour;
+  }
+}
+
+function computeAsr(noon, dec, lat) {
+  let decRad = dec * Math.PI / 180;
+  let latRad = lat * Math.PI / 180;
+  
+  // المذهب الحنفي: الظل = 2 أضعاف
+  let shadowFactor = 1; // تغيير لـ 2 للمذهب الحنفي
+  
+  let a = Math.abs(Math.tan((latRad - decRad)));
+  let b = Math.abs(Math.tan((latRad + decRad)));
+  let angle = Math.atan(1 / (shadowFactor + a)) * 180 / Math.PI;
+  
+  return computeTime(noon, angle, dec, lat, true);
+}
+
+function formatTime(hours) {
+  if (hours < 0) hours += 24;
+  if (hours >= 24) hours -= 24;
+  
+  let h = Math.floor(hours);
+  let m = Math.round((hours - h) * 60);
+  if (m === 60) { h++; m = 0; }
+  
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+}
   try{
     let lat=30.0444,lon=31.2357;
     if(navigator.geolocation){
