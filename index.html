@@ -432,19 +432,34 @@ let activeHadith = null;
 
 // ==================== التنقل ====================
 function navigateTo(id){
-  document.getElementById('homeScreen').style.display='none';
-  ['quran','hadith','audio','azkar','wird','prayer','seerah','ruqyah','stories'].forEach(s=>document.getElementById(s+'Section').classList.remove('active'));
-  document.getElementById(id+'Section').classList.add('active');
-  if(id==='quran')renderSurahList();
-  if(id==='hadith')renderHadith();
-  if(id==='audio'){initAudio();updateAudioSrc();}
-  if(id==='azkar'){updateTasbeeh();showAzkarType('morning')}
-  if(id==='wird')renderTasks();
-  if(id==='prayer'){updateHijri();if(prayerTimer)clearInterval(prayerTimer);getPrayers();prayerTimer=setInterval(updateNext,1000);}
-  if(id==='seerah')initSeerah();
-  if(id==='ruqyah')renderRuqyah();
-  if(id==='stories')renderProphets();
+  // إخفاء الشاشة الرئيسية
+  document.getElementById('homeScreen').style.display = 'none';
+  
+  // إخفاء كل الأقسام
+  let allSections = ['quran','hadith','audio','azkar','wird','prayer','seerah','ruqyah','stories'];
+  allSections.forEach(function(s) {
+    let el = document.getElementById(s + 'Section');
+    if (el) el.classList.remove('active');
+  });
+  
+  // إظهار القسم المطلوب
+  let target = document.getElementById(id + 'Section');
+  if (target) {
+    target.classList.add('active');
+  }
+  
+  // تحميل المحتوى حسب القسم
+  if (id === 'quran') renderSurahList();
+  if (id === 'hadith') renderHadith();
+  if (id === 'audio') { initAudio(); updateAudioSrc(); }
+  if (id === 'azkar') { updateTasbeeh(); showAzkarType('morning'); }
+  if (id === 'wird') renderTasks();
+  if (id === 'prayer') { updateHijri(); getPrayers(); }
+  if (id === 'seerah') initSeerah();
+  if (id === 'ruqyah') renderRuqyah();
+  if (id === 'stories') renderProphets();
 }
+
 function goHome(){
   document.getElementById('homeScreen').style.display='block';
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
