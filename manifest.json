@@ -1,0 +1,11 @@
+{
+  "name": "فَيْضُ الْقُرْآنِ",
+  "short_name": "فيض القرآن",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1B4D3E",
+  "theme_color": "#1B4D3E",
+  "orientation": "portrait-primary",
+  "lang": "ar",
+  "dir": "rtl"
+}
