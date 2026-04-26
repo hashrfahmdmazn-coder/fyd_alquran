@@ -1,11 +1,18 @@
 {
   "name": "فَيْضُ الْقُرْآنِ",
   "short_name": "فيض القرآن",
-  "start_url": "/",
+  "start_url": "/فيض-القرآن/",
   "display": "standalone",
   "background_color": "#1B4D3E",
   "theme_color": "#1B4D3E",
   "orientation": "portrait-primary",
   "lang": "ar",
-  "dir": "rtl"
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
