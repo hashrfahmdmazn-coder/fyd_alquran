@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>فَيْضُ الْقُرْآنِ</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1B4D3E">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icon-512.png">
+  <link rel="icon" type="image/png" href="icon-512.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/earlyaccess/amiri.css');
+
+.quran-ayahs {
+    font-family: 'Amiri', 'Scheherazade New', 'Traditional Arabic', serif;
+    font-size: 1.5rem;
+    line-height: 2.8;
+    text-align: justify;
+    direction: rtl;
+    word-spacing: 3px;
+}
+    :root { --deep-green: #1B4D3E; --gold: #D4AF37; --cream: #FFF8F0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Cairo','Segoe UI',sans-serif; background: linear-gradient(160deg,#F9F6F0 0%,var(--cream) 100%); color: #2D2D2D; line-height: 1.7; min-height: 100vh; padding-bottom: 30px; }
+    .app-container { max-width: 650px; margin: 0 auto; padding: 15px; }
+    .app-header { background: linear-gradient(135deg,var(--deep-green),#0A2F20); color: white; border-radius: 25px; padding: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 10px 30px rgba(27,77,62,0.3); }
+    .app-header h1 { font-size: 2.5rem; color: var(--gold); font-weight: 700; }
+    .cards-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 15px; margin-bottom: 25px; }
+    .card,button,.back-btn,.list-item,.prophet-node,.hadith-header,.ayah-number { transition: all 0.3s ease; cursor: pointer; }
+    .card { background: white; border-radius: 20px; padding: 20px 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 1px solid rgba(212,175,55,0.2); }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); border-color: var(--gold); }
+    .card i { font-size: 2rem; color: var(--gold); margin-bottom: 8px; }
+    .card h3 { font-size: 0.95rem; color: var(--deep-green); }
+    button:hover { transform: scale(1.03); opacity: 0.9; }
+    .back-btn:hover { transform: scale(1.05); }
+    .list-item:hover { transform: translateX(-5px); background: #FFF3E0; }
+    .prophet-node:hover { transform: scale(1.04); box-shadow: 0 10px 30px rgba(212,175,55,0.5); border-color: #FFD700; }
+    .hadith-header:hover { background: #FFF3E0; border-radius: 15px; }
+    .ayah-number:hover { transform: scale(1.2); }
+    .section { display: none; background: white; border-radius: 25px; padding: 20px; margin-top: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); animation: fadeIn 0.4s ease; }
+    .section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #F5E6D3; padding-bottom: 12px; position: sticky; top: 0; background: white; z-index: 5; }
+    .section-header h2 { color: var(--deep-green); }
+    .back-btn { background: linear-gradient(135deg,var(--gold),#B8941F); border: none; color: white; padding: 8px 18px; border-radius: 25px; font-weight: bold; }
+    .list-item { background: #FCFAF5; padding: 14px; border-radius: 14px; margin-bottom: 8px; border-right: 4px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
+    .quran-page { background: #FFFDF7; border: 2px solid var(--gold); border-radius: 25px; padding: 30px; text-align: center; }
+    .surah-title-inner { background: var(--deep-green); color: var(--gold); padding: 10px; border-radius: 15px; margin-bottom: 20px; display: inline-block; }
+    .bismillah { font-size: 2rem; margin: 15px 0; color: var(--deep-green); }
+    .quran-ayahs { text-align: justify; line-height: 2.8; font-size: 1.5rem; direction: rtl; font-family: 'Amiri','Traditional Arabic',serif; color: #1a1a1a; }
+    .ayah-number { display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg,var(--gold),#B8941F); color: white; border-radius: 50%; text-align: center; line-height: 30px; font-size: 0.8rem; margin: 0 4px; font-weight: bold; box-shadow: 0 2px 8px rgba(212,175,55,0.3); }
+    .hadith-card { background: #FFFDF7; border: 1px solid #F0D78C; border-radius: 18px; padding: 15px; margin-bottom: 12px; }
+    .hadith-header { display: flex; align-items: center; gap: 12px; padding: 5px; }
+    .hadith-number { background: var(--deep-green); color: var(--gold); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+    .hadith-full { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--gold); line-height: 2; }
+    .hadith-full.show { display: block; }
+    .tasbeeh-circle { width: 140px; height: 140px; background: radial-gradient(circle at 30% 30%,#F7E9C3,var(--gold)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 25px auto; font-size: 2.2rem; font-weight: bold; color: var(--deep-green); box-shadow: 0 12px 30px rgba(212,175,55,0.4); cursor: pointer; user-select: none; }
+    .tasbeeh-circle:active { transform: scale(0.9); }
+    .progress-bar { height: 14px; background: #E0E0E0; border-radius: 15px; margin: 15px 0; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg,var(--gold),var(--deep-green)); border-radius: 15px; transition: width 0.5s; }
+    .prophet-node { background: linear-gradient(135deg,#1a3a5c,#0d2137); color: white; padding: 15px 25px; border-radius: 15px; margin: 10px auto; width: 85%; cursor: pointer; border: 2px solid var(--gold); font-size: 1.1rem; text-align: center; }
+    .prophet-detail { background: #FFFDF7; padding: 15px; border-radius: 12px; margin: 5px auto 12px; width: 90%; border-right: 3px solid var(--gold); display: none; text-align: center; }
+    .prophet-detail.show { display: block; animation: fadeIn 0.3s ease; }
+    .celebration-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; }
+    .celebration-content { background: white; padding: 35px; border-radius: 25px; text-align: center; animation: bounceIn 0.6s; }
+    @keyframes bounceIn { 0%{transform:scale(0.3)} 50%{transform:scale(1.1)} 100%{transform:scale(1)} }
+    .prayer-row { display: flex; justify-content: space-between; padding: 12px 15px; background: #F9F6F0; border-radius: 14px; margin-bottom: 8px; align-items: center; }
+    .prayer-row.next { background: #FFF8E1; border: 2px solid var(--gold); }
+    .tafseer-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+    .tafseer-popup { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: white; border-radius: 25px 25px 0 0; padding: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); z-index: 1000; max-height: 60vh; overflow-y: auto; animation: slideUp 0.3s ease; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .signature { text-align: center; padding: 12px; background: rgba(27,77,62,0.03); border-top: 1px solid rgba(212,175,55,0.2); margin-top: 30px; font-size: 0.7rem; }
+    @media (max-width:480px) { .cards-grid { grid-template-columns: repeat(3,1fr); gap: 10px; } .card { padding: 15px 8px; } .card i { font-size: 1.6rem; } .card h3 { font-size: 0.8rem; } }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <header class="app-header"><h1>فَيْضُ الْقُرْآنِ</h1><p style="opacity:0.8;font-size:0.9rem;">وَنُنَزِّلُ مِنَ الْقُرْآنِ مَا هُوَ شِفَاءٌ وَرَحْمَةٌ</p></header>
+
+  <div id="homeScreen">
+    <div class="cards-grid">
+      <div class="card" onclick="navigateTo('quran')"><i class="fas fa-book-open"></i><h3>القرآن</h3></div>
+      <div class="card" onclick="navigateTo('hadith')"><i class="fas fa-scroll"></i><h3>الأحاديث</h3></div>
+      <div class="card" onclick="navigateTo('audio')"><i class="fas fa-play-circle"></i><h3>صوت القرآن</h3></div>
+      <div class="card" onclick="navigateTo('prayer')"><i class="fas fa-mosque"></i><h3>مواقيت الصلاة</h3></div>
+      <div class="card" onclick="navigateTo('seerah')"><i class="fas fa-star-and-crescent"></i><h3>السيرة النبوية</h3></div>
+      <div class="card" onclick="navigateTo('azkar')"><i class="fas fa-hands-praying"></i><h3>الأذكار</h3></div>
+      <div class="card" onclick="navigateTo('wird')"><i class="fas fa-calendar-check"></i><h3>الورد اليومي</h3></div>
+      <div class="card" onclick="navigateTo('ruqyah')"><i class="fas fa-heart"></i><h3>الرقية</h3></div>
+      <div class="card" onclick="navigateTo('mawaqef')"><i class="fas fa-users"></i><h3>مواقف الصحابة</h3></div>
+    </div>
+    <div style="text-align:center;margin:15px 0;">
+      <div class="card" onclick="navigateTo('stories')" style="display:inline-block;width:60%;max-width:250px;">
+        <i class="fas fa-tree"></i><h3>شجرة الأنبياء</h3>
+      </div>
+    </div>
+    <div style="text-align:center;margin:20px 0;">
+      <button onclick="sendSalawat()" style="background:linear-gradient(135deg,#D4AF37,#B8941F);color:white;border:none;padding:14px 30px;border-radius:30px;font-size:1.1rem;font-weight:bold;">ﷺ اللهم صلِّ على محمد ﷺ</button>
+      <div id="salawatCounter" style="margin-top:8px;color:var(--deep-green);">عدد الصلوات: 0</div>
+      <button onclick="resetSalawat()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);padding:5px 15px;border-radius:20px;font-size:0.75rem;margin-top:5px;">✨ بدء من جديد</button>
+    </div>
+  </div>
+
+  <div class="celebration-overlay" id="celebration">
+    <div class="celebration-content">
+      <i class="fas fa-trophy" style="font-size:4rem;color:#D4AF37;"></i>
+      <h2 style="color:#1B4D3E;margin:15px 0;">ما شاء الله! 🎉</h2>
+      <p>انتهيت من الورد اليومي</p>
+      <button onclick="closeCelebration()" style="background:#D4AF37;border:none;padding:10px 25px;border-radius:20px;margin-top:15px;font-weight:bold;">الحمد لله</button>
+    </div>
+  </div>
+
+  <!-- الأقسام -->
+  <div id="quranSection" class="section"><div class="section-header"><h2>القرآن الكريم</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div id="surahList"></div><div id="surahContent" style="display:none;"></div></div>
+  <div id="hadithSection" class="section"><div class="section-header"><h2>الاربعون النوويه</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div id="hadithContainer"></div></div>
+<div id="audioSection" class="section">
+  <div class="section-header"><h2>🎙️ صوت القرآن - مشاري العفاسي</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div>
+  
+  <select id="audioSurahSelect" onchange="playAudio()" style="width:100%;padding:12px;border-radius:30px;margin-bottom:15px;"></select>
+  
+  <audio id="audioPlayer" controls preload="auto" style="width:100%;"></audio>
+</div>
+</div>
+  <div id="prayerSection" class="section">
+  <div class="section-header"><h2>🕌 مواقيت الصلاة</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div>
+  <div id="hijriBox" style="background:linear-gradient(135deg,#1B4D3E,#0A2F20);color:white;padding:15px;border-radius:18px;text-align:center;margin-bottom:15px;">
+  <div style="font-size:2.5rem;font-weight:bold;color:#D4AF37;" id="hijriDay">--</div>
+  <div id="hijriMonthYear">---</div>
+</div>
+<div id="prayerTimesList"></div>
+<div id="nextPrayerBox" style="margin-top:15px;"></div>
+    <div style="font-size:2.5rem;font-weight:bold;color:#D4AF37;" id="hijriDay">--</div>
+    <div id="hijriMonthYear">---</div>
+  </div>
+  <div id="prayerTimesList"></div>
+  <div id="nextPrayerBox" style="margin-top:15px;"></div>
+</div>
+  <div id="seerahSection" class="section"><div class="section-header"><h2>السيرة النبوية</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div id="seerahNav" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:15px;"></div><div id="seerahContent" style="background:#FFFDF7;padding:18px;border-radius:18px;line-height:2.2;border-right:4px solid var(--gold);"></div></div>
+  <div id="azkarSection" class="section"><div class="section-header"><h2>الأذكار والسبحة</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div style="text-align:center;color:var(--gold);font-size:1.1rem;margin-bottom:15px;">⚜️ أذكارك حصنك ⚜️</div><div style="display:flex;gap:8px;margin-bottom:15px;"><button onclick="showAzkarType('morning')" style="flex:1;padding:10px;background:var(--deep-green);color:white;border:none;border-radius:20px;">الصباح</button><button onclick="showAzkarType('evening')" style="flex:1;padding:10px;background:var(--gold);border:none;border-radius:20px;">المساء</button><button onclick="showAzkarType('afterPrayer')" style="flex:1;padding:10px;background:#5A4A42;color:white;border:none;border-radius:20px;">بعد الصلاة</button></div><div id="azkarText"></div><div style="text-align:center;"><div class="tasbeeh-circle" id="tasbeehCircle" onclick="incrementTasbeeh()">0</div><button onclick="resetTasbeeh()" style="background:var(--deep-green);color:white;border:none;padding:10px 20px;border-radius:25px;">✨ بدء من جديد</button></div></div>
+  <div id="wirdSection" class="section"><div class="section-header"><h2>الورد اليومي</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div id="dailyTasks"></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><p id="progressText">0% مكتمل</p></div>
+  <div id="ruqyahSection" class="section"><div class="section-header"><h2>الرقية الشرعية</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div id="ruqyahContent"></div></div>
+  <div id="storiesSection" class="section"><div class="section-header"><h2>شجرة الأنبياء والمرسلين</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div id="prophetsTree" style="text-align:center;"></div></div>
+  <div id="mawaqefSection" class="section"><div class="section-header"><h2>مواقف مع الصحابة</h2><button class="back-btn" onclick="goHome()">↩ رجوع</button></div><div id="mawaqefNav" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:15px;"></div><div id="mawaqefContent" style="background:#FFFDF7;padding:18px;border-radius:18px;line-height:2.2;border-right:4px solid var(--gold);"></div></div>
+
+  <!-- نوافذ التفسير -->
+  <div class="tafseer-overlay" id="tafseerOverlay" onclick="closeTafseer()"></div>
+  <div class="tafseer-popup" id="tafseerPopup">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+      <h3 style="color:var(--deep-green);">📖 التفسير</h3>
+      <button onclick="closeTafseer()" style="background:var(--gold);color:white;border:none;padding:8px 15px;border-radius:20px;cursor:pointer;">✕ إغلاق</button>
+    </div>
+    <div id="tafseerContent" style="line-height:2.2;"></div>
+  </div>
+
+  <div class="signature">
+    <p style="margin:0;color:var(--deep-green);">تطبيق <strong style="color:var(--gold);">فَيْضُ الْقُرْآنِ</strong></p>
+    <p style="margin:2px 0;color:#888;font-size:0.50rem;font-style:italic;">by <strong>Eng. Helmy Ashraf Ahmed Mazen</strong></p>
+    <p style="margin:2px 0;color:#aaa;font-size:0.55rem;">© 2026 جميع الحقوق محفوظة</p>
+  </div>
+</div>
+
+<script>
+// ==================== البيانات ====================
+const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+const meccanSurahs = {1:true,2:false,3:false,4:false,5:false,6:true,7:true,8:false,9:false,10:true,11:true,12:true,13:true,14:true,15:true,16:true,17:true,18:true,19:true,20:true,21:true,22:true,23:true,24:false,25:true,26:true,27:true,28:true,29:true,30:true,31:true,32:true,33:false,34:true,35:true,36:true,37:true,38:true,39:true,40:true,41:true,42:true,43:true,44:true,45:true,46:true,47:false,48:false,49:false,50:true,51:true,52:true,53:true,54:true,55:true,56:true,57:false,58:false,59:false,60:false,61:false,62:false,63:false,64:false,65:false,66:false,67:true,68:true,69:true,70:true,71:true,72:true,73:true,74:true,75:true,76:true,77:true,78:true,79:true,80:true,81:true,82:true,83:true,84:true,85:true,86:true,87:true,88:true,89:true,90:true,91:true,92:true,93:true,94:true,95:true,96:true,97:true,98:false,99:false,100:true,101:true,102:true,103:true,104:true,105:true,106:true,107:true,108:true,109:true,110:false,111:true,112:true,113:true,114:true};
+
+const hadithList = [
+  {n:1,t:"عن أمير المؤمنين أبي حفص عمر بن الخطاب رضي الله عنه قال: سمعت رسول الله صلى الله عليه وسلم يقول: «إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى، فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله، ومن كانت هجرته لدنيا يصيبها أو امرأة ينكحها فهجرته إلى ما هاجر إليه». رواه البخاري ومسلم."},
+  {n:2,t:"عن عمر رضي الله عنه أيضاً قال: بينما نحن جلوس عند رسول الله صلى الله عليه وسلم ذات يوم، إذ طلع علينا رجل شديد بياض الثياب، شديد سواد الشعر... فأسند ركبتيه إلى ركبتيه، وقال: يا محمد أخبرني عن الإسلام... قال: «فإنه جبريل أتاكم يعلمكم دينكم». رواه مسلم."},
+  {n:3,t:"عن ابن عمر رضي الله عنهما قال: سمعت رسول الله صلى الله عليه وسلم يقول: «بني الإسلام على خمس: شهادة أن لا إله إلا الله وأن محمداً رسول الله، وإقام الصلاة، وإيتاء الزكاة، وحج البيت، وصوم رمضان». رواه البخاري ومسلم."},
+  {n:4,t:"عن ابن مسعود رضي الله عنه قال: حدثنا رسول الله صلى الله عليه وسلم: «إن أحدكم يجمع خلقه في بطن أمه أربعين يوماً نطفة... فوالذي لا إله غيره، إن أحدكم ليعمل بعمل أهل الجنة حتى ما يكون بينه وبينها إلا ذراع...». رواه البخاري ومسلم."},
+  {n:5,t:"عن عائشة رضي الله عنها قالت: قال رسول الله صلى الله عليه وسلم: «من أحدث في أمرنا هذا ما ليس منه فهو رد». رواه البخاري ومسلم."},
+  {n:6,t:"عن النعمان بن بشير رضي الله عنهما قال: سمعت رسول الله صلى الله عليه وسلم يقول: «إن الحلال بين، وإن الحرام بين، وبينهما أمور مشتبهات... ألا وإن في الجسد مضغة إذا صلحت صلح الجسد كله، ألا وهي القلب». رواه البخاري ومسلم."},
+  {n:7,t:"عن تميم الداري رضي الله عنه أن النبي صلى الله عليه وسلم قال: «الدين النصيحة». قلنا: لمن؟ قال: «لله، ولكتابه، ولرسوله، ولأئمة المسلمين وعامتهم». رواه مسلم."},
+  {n:8,t:"عن ابن عمر رضي الله عنهما أن رسول الله صلى الله عليه وسلم قال: «أمرت أن أقاتل الناس حتى يشهدوا أن لا إله إلا الله وأن محمداً رسول الله، ويقيموا الصلاة، ويؤتوا الزكاة». رواه البخاري ومسلم."},
+  {n:9,t:"عن أبي هريرة رضي الله عنه قال: سمعت رسول الله صلى الله عليه وسلم يقول: «ما نهيتكم عنه فاجتنبوه، وما أمرتكم به فأتوا منه ما استطعتم». رواه البخاري ومسلم."},
+  {n:10,t:"عن أبي هريرة رضي الله عنه قال: قال رسول الله صلى الله عليه وسلم: «إن الله تعالى طيب لا يقبل إلا طيباً... فأنى يستجاب لذلك؟». رواه مسلم."},
+  {n:11,t:"عن الحسن بن علي رضي الله عنهما قال: حفظت من رسول الله صلى الله عليه وسلم: «دع ما يريبك إلى ما لا يريبك». رواه الترمذي."},
+  {n:12,t:"عن أبي هريرة رضي الله عنه قال: قال رسول الله صلى الله عليه وسلم: «من حسن إسلام المرء تركه ما لا يعنيه». رواه الترمذي."},
+  {n:13,t:"عن أنس رضي الله عنه عن النبي صلى الله عليه وسلم قال: «لا يؤمن أحدكم حتى يحب لأخيه ما يحب لنفسه». رواه البخاري ومسلم."},
+  {n:14,t:"عن ابن مسعود رضي الله عنه قال: «لا يحل دم امرئ مسلم يشهد أن لا إله إلا الله وأني رسول الله إلا بإحدى ثلاث: الثيب الزاني، والنفس بالنفس، والتارك لدينه المفارق للجماعة». رواه البخاري ومسلم."},
+  {n:15,t:"عن أبي هريرة رضي الله عنه أن رسول الله صلى الله عليه وسلم قال: «من كان يؤمن بالله واليوم الآخر فليقل خيراً أو ليصمت، ومن كان يؤمن بالله واليوم الآخر فليكرم جاره، ومن كان يؤمن بالله واليوم الآخر فليكرم ضيفه». رواه البخاري ومسلم."},
+  {n:16,t:"عن أبي هريرة رضي الله عنه أن رجلاً قال للنبي صلى الله عليه وسلم: أوصني. قال: «لا تغضب». فردد مراراً، قال: «لا تغضب». رواه البخاري."},
+  {n:17,t:"عن شداد بن أوس رضي الله عنه عن رسول الله صلى الله عليه وسلم قال: «إن الله كتب الإحسان على كل شيء، فإذا قتلتم فأحسنوا القتلة، وإذا ذبحتم فأحسنوا الذبحة». رواه مسلم."},
+  {n:18,t:"عن أبي ذر ومعاذ بن جبل رضي الله عنهما قال: قال رسول الله صلى الله عليه وسلم: «اتق الله حيثما كنت، وأتبع السيئة الحسنة تمحها، وخالق الناس بخلق حسن». رواه الترمذي."},
+  {n:19,t:"عن ابن عباس رضي الله عنهما قال: كنت خلف النبي صلى الله عليه وسلم فقال: «يا غلام، إني أعلمك كلمات: احفظ الله يحفظك... رفعت الأقلام وجفت الصحف». رواه الترمذي."},
+  {n:20,t:"عن أبي مسعود رضي الله عنه قال: قال رسول الله صلى الله عليه وسلم: «إن مما أدرك الناس من كلام النبوة الأولى: إذا لم تستح فاصنع ما شئت». رواه البخاري."},
+  {n:21,t:"عن سفيان بن عبد الله رضي الله عنه قال: قلت: يا رسول الله، قل لي في الإسلام قولاً لا أسأل عنه أحداً غيرك. قال: «قل آمنت بالله ثم استقم». رواه مسلم."},
+  {n:22,t:"عن جابر رضي الله عنه أن رجلاً سأل رسول الله صلى الله عليه وسلم: أرأيت إذا صليت المكتوبات... أأدخل الجنة؟ قال: «نعم». رواه مسلم."},
+  {n:23,t:"عن أبي مالك الأشعري رضي الله عنه قال: قال رسول الله صلى الله عليه وسلم: «الطهور شطر الإيمان، والحمد لله تملأ الميزان... والصلاة نور، والصدقة برهان، والصبر ضياء». رواه مسلم."},
+  {n:24,t:"عن أبي ذر رضي الله عنه عن النبي صلى الله عليه وسلم قال: «يا عبادي، إني حرمت الظلم على نفسي وجعلته بينكم محرماً فلا تظالموا... فاستغفروني أغفر لكم». رواه مسلم."},
+  {n:25,t:"عن أبي ذر رضي الله عنه أن ناساً قالوا: يا رسول الله، ذهب أهل الدثور بالأجور... قال: «أو ليس قد جعل الله لكم ما تصدقون؟ إن بكل تسبيحة صدقة... وفي بضع أحدكم صدقة». رواه مسلم."},
+  {n:26,t:"عن أبي هريرة رضي الله عنه قال: قال رسول الله صلى الله عليه وسلم: «كل سلامى من الناس عليه صدقة... تعدل بين الاثنين صدقة... وتميط الأذى عن الطريق صدقة». رواه البخاري ومسلم."},
+  {n:27,t:"عن النواس بن سمعان رضي الله عنه عن النبي صلى الله عليه وسلم قال: «البر حسن الخلق، والإثم ما حاك في نفسك وكرهت أن يطلع عليه الناس». رواه مسلم."},
+  {n:28,t:"عن العرباض بن سارية رضي الله عنه قال: وعظنا رسول الله صلى الله عليه وسلم موعظة... قال: «أوصيكم بتقوى الله... فعليكم بسنتي وسنة الخلفاء الراشدين... وإياكم ومحدثات الأمور فإن كل بدعة ضلالة». رواه أبو داود والترمذي."},
+  {n:29,t:"عن معاذ بن جبل رضي الله عنه قال: قلت: يا رسول الله، أخبرني بعمل يدخلني الجنة... قال: «رأس الأمر الإسلام... ألا أخبرك بملاك ذلك كله؟ كف عليك هذا - وأخذ بلسانه». رواه الترمذي."},
+  {n:30,t:"عن أبي ثعلبة رضي الله عنه عن رسول الله صلى الله عليه وسلم قال: «إن الله تعالى فرض فرائض فلا تضيعوها، وحد حدوداً فلا تعتدوها، وحرم أشياء فلا تنتهكوها». رواه الدارقطني."},
+  {n:31,t:"عن سهل بن سعد رضي الله عنه قال: جاء رجل إلى النبي صلى الله عليه وسلم فقال: دلني على عمل إذا عملته أحبني الله وأحبني الناس. فقال: «ازهد في الدنيا يحبك الله، وازهد فيما عند الناس يحبك الناس». رواه ابن ماجه."},
+  {n:32,t:"عن أبي سعيد الخدري رضي الله عنه أن رسول الله صلى الله عليه وسلم قال: «لا ضرر ولا ضرار». رواه ابن ماجه والدارقطني."},
+  {n:33,t:"عن ابن عباس رضي الله عنهما أن رسول الله صلى الله عليه وسلم قال: «لو يعطى الناس بدعواهم، لادعى رجال أموال قوم ودماءهم، لكن البينة على المدعي، واليمين على من أنكر». رواه البيهقي."},
+  {n:34,t:"عن أبي سعيد الخدري رضي الله عنه قال: سمعت رسول الله صلى الله عليه وسلم يقول: «من رأى منكم منكراً فليغيره بيده، فإن لم يستطع فبلسانه، فإن لم يستطع فبقلبه، وذلك أضعف الإيمان». رواه مسلم."},
+  {n:35,t:"عن أبي هريرة رضي الله عنه قال: قال رسول الله صلى الله عليه وسلم: «لا تحاسدوا، ولا تناجشوا، ولا تباغضوا، ولا تدابروا... التقوى هاهنا - ويشير إلى صدره». رواه مسلم."},
+  {n:36,t:"عن أبي هريرة رضي الله عنه عن النبي صلى الله عليه وسلم قال: «من نفس عن مؤمن كربة من كرب الدنيا، نفس الله عنه كربة من كرب يوم القيامة... والله في عون العبد ما كان العبد في عون أخيه». رواه مسلم."},
+  {n:37,t:"عن ابن عباس رضي الله عنهما عن رسول الله صلى الله عليه وسلم قال: «إن الله كتب الحسنات والسيئات... فمن هم بحسنة فلم يعملها كتبها الله عنده حسنة كاملة...». رواه البخاري ومسلم."},
+  {n:38,t:"عن أبي هريرة رضي الله عنه قال: قال رسول الله صلى الله عليه وسلم: «إن الله قال: من عادى لي ولياً فقد آذنته بالحرب...». رواه البخاري."},
+  {n:39,t:"عن ابن عباس رضي الله عنهما أن رسول الله صلى الله عليه وسلم قال: «إن الله تجاوز لي عن أمتي الخطأ والنسيان وما استكرهوا عليه». رواه ابن ماجه."},
+  {n:40,t:"عن ابن عمر رضي الله عنهما قال: أخذ رسول الله صلى الله عليه وسلم بمنكبي فقال: «كن في الدنيا كأنك غريب أو عابر سبيل». رواه البخاري."},
+  {n:41,t:"عن أبي محمد عبد الله بن عمرو بن العاص رضي الله عنهما قال: قال رسول الله صلى الله عليه وسلم: «لا يؤمن أحدكم حتى يكون هواه تبعاً لما جئت به». حديث حسن صحيح."},
+  {n:42,t:"عن أنس رضي الله عنه قال: سمعت رسول الله صلى الله عليه وسلم يقول: «قال الله تعالى: يا ابن آدم، إنك ما دعوتني ورجوتني غفرت لك على ما كان منك ولا أبالي...». رواه الترمذي."}
+];
+
+const seerahData = {
+  "نسبه": `<h3>📜 نسبه الشريف</h3>
+<p>هو <span style="color:#B8941F;font-weight:bold;">محمد بن عبد الله بن عبد المطلب</span> (وشيبة الحمد) <span style="color:#B8941F;font-weight:bold;">بن هاشم</span> (عمرو) <span style="color:#B8941F;font-weight:bold;">بن عبد مناف</span> (المغيرة) <span style="color:#B8941F;font-weight:bold;">بن قصي</span> (زيد) <span style="color:#B8941F;font-weight:bold;">بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر</span> (قريش) <span style="color:#B8941F;font-weight:bold;">بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان</span>.</p>
+<p>أبوه: <span style="color:#B8941F;font-weight:bold;">عبد الله بن عبد المطلب</span> الذبيح الذي فداه جده بمائة ناقة. توفي قبل مولده صلى الله عليه وسلم بشهرين (وقيل وهو حمل في بطن أمه). أمه: <span style="color:#B8941F;font-weight:bold;">آمنة بنت وهب</span> بن عبد مناف بن زهرة، سيدة نساء قريش. جده: <span style="color:#B8941F;font-weight:bold;">عبد المطلب</span> (شيبة الحمد) سيد قريش وحافر بئر زمزم. أعمامه: حمزة أسد الله، العباس، أبو طالب (كفيله)، أبو لهب، الحارث، الزبير، المقوم، ضرار، قثم، المغيرة، الغيداق. عماته: صفية (أم الزبير)، عاتكة، أروى، أميمة، برة، أم حكيم البيضاء.</p>`,
+
+  "المولد": `<h3>🌙 المولد النبوي الشريف</h3>
+<p>ولد <span style="color:#B8941F;font-weight:bold;">يوم الاثنين 12 ربيع الأول عام الفيل</span> (الموافق 20 أبريل سنة 571م). مكانه: شعب بني هاشم بمكة المكرمة (في الدار التي صارت لاحقاً لمحمد بن يوسف الثقفي). وُلد يتيماً مختوناً مقطوع السرة. أمه آمنة قالت: "رأيت عند ولادته نوراً أضاء قصور بصرى من أرض الشام".</p>
+<p>سمّاه جده <span style="color:#B8941F;font-weight:bold;">محمداً</span> (اسم لم يكن شائعاً عند العرب)، وجاء في رؤيا لأمه أن تسميه "محمداً". أرضعته أولاً <span style="color:#B8941F;font-weight:bold;">ثويبة</span> جارية عمه أبي لهب (التي أعتقها أبو لهب حين بشرته بولادته)، ثم <span style="color:#B8941F;font-weight:bold;">حليمة السعدية</span> من بني سعد بن بكر، وبقي في البادية أربع سنوات.</p>
+<p><span style="color:#B8941F;font-weight:bold;">آيات ليلة مولده:</span> ارتجاج إيوان كسرى (كسرى أنوشروان) وسقوط 14 شرفة منه، انطفاء نار فارس التي كانت تعبد من دون الله (ولم تنطفئ قبل ذلك بألف عام)، جفاف بحيرة ساوة، رؤيا رآها كسرى أفزعته.</p>`,
+
+  "الطفولة": `<h3>👶 طفولته صلى الله عليه وسلم</h3>
+<p><span style="color:#B8941F;font-weight:bold;">حادثة شق الصدر:</span> حدثت وهو ابن أربع سنين عند حليمة السعدية. أتاه جبريل وميكائيل عليهما السلام، أضجعاه على ظهره، وشق جبريل صدره الشريف، واستخرج قلبه، وغسله بماء زمزم في طست من ذهب، وأخرج منه علقة سوداء وقال: "هذا حظ الشيطان منك". ثم ملأ قلبه إيماناً وحكمة. خافت حليمة وأعادته إلى أمه. (حدثت مرة أخرى ليلة الإسراء والمعراج).</p>
+<p>توفيت أمه <span style="color:#B8941F;font-weight:bold;">آمنة بنت وهب</span> وهو ابن ست سنوات في "الأبواء" (بين مكة والمدينة) أثناء عودتها من زيارة أخواله من بني عدي بن النجار. دفنت هناك. حملته أم أيمن (بركة الحبشية جارية أبيه) إلى جده <span style="color:#B8941F;font-weight:bold;">عبد المطلب</span> الذي كفله. كان الجد يجلسه على فراشه ويكرمه ويقول: "دعوا ابني فوالله إن له لشأناً".</p>
+<p>مات الجد عبد المطلب وعمره ثمان سنوات (وعمر الجد 82 سنة). كفله عمه <span style="color:#B8941F;font-weight:bold;">أبو طالب</span> الفقير كثير العيال، فأحبه وقدمه على أولاده، وكان ينام إلى جنبه، ويرافقه في أسفاره. رعى النبي الغنم على قراريط (دراهم) لأهل مكة ليساعد عمه. قال لاحقاً: <span style="font-style:italic;">"ما بعث الله نبياً إلا رعى الغنم"</span>.</p>`,
+
+  "الشباب": `<h3>💼 شبابه صلى الله عليه وسلم</h3>
+<p>خرج في تجارة إلى الشام مع عمه أبي طالب وعمره اثنتا عشرة سنة. في "بصرى" (جنوب سوريا) لقيهم الراهب <span style="color:#B8941F;font-weight:bold;">بحيرى</span>، فرأى سحابة تظلله من بين القافلة، ورأى خاتم النبوة بين كتفيه (بضعة ناشزة مثل بيضة الحمامة)، فأخبر عمه: "ارجع بابن أخيك إلى بلدك واحذر عليه اليهود، فوالله لئن رأوه وعرفوا منه ما عرفت ليبلغنه شراً، فإنه سيكون له شأن عظيم".</p>
+<p>عمل بالتجارة ولُقب <span style="color:#B8941F;font-weight:bold;">"الصادق الأمين"</span>. اشتهر بأمانته بين قريش، فكانوا يودعون أماناتهم عنده. استأجرته <span style="color:#B8941F;font-weight:bold;">خديجة بنت خويلد</span> التاجرة الغنية ذات الشرف في تجارة إلى الشام مع غلامها ميسرة. ربحت تجارتها أضعافاً مضاعفة. أحبته خديجة وعرضت الزواج منه عن طريق صديقتها نفيسة بنت منية.</p>
+<p>تزوجها وعمره <span style="color:#B8941F;font-weight:bold;">خمس وعشرون سنة</span> وهي أربعون سنة. المهر: عشرون بكرة (ناقة). جميع أولاده منها إلا إبراهيم. عاش معها خمساً وعشرين سنة لم يتزوج عليها حتى ماتت.</p>
+<p><span style="color:#B8941F;font-weight:bold;">حلف الفضول:</span> تحالف لنصرة المظلوم في دار عبد الله بن جدعان. شارك فيه قبل البعثة وقال: "لو دعيت به في الإسلام لأجبت". <span style="color:#B8941F;font-weight:bold;">بناء الكعبة:</span> ساهم وهو ابن 35 سنة عندما جددتها قريش، وحكم بحكمته عندما اختلفت القبائل فيمن يضع الحجر الأسود، فوضعه في ثوب وأمسكت كل قبيلة بطرف، ورفعه ووضعه بيده الشريفة في مكانه.</p>
+<p>قبل البعثة كان يتحنث (يتعبد) في <span style="color:#B8941F;font-weight:bold;">غار حراء</span> (في جبل النور) أياماً وليالي. كان ذلك استعداداً روحياً للوحي.</p>`,
+
+  "البعثة": `<h3>📖 البعثة النبوية</h3>
+<p>نزل <span style="color:#B8941F;font-weight:bold;">جبريل عليه السلام</span> وهو في غار حراء <span style="color:#B8941F;font-weight:bold;">ليلة القدر من رمضان وعمره 40 سنة</span>. قال: "اقرأ"، قال: "ما أنا بقارئ" (ثلاث مرات). فنزلت أول خمس آيات من سورة العلق: <span style="font-style:italic;">﴿اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ * خَلَقَ الْإِنْسَانَ مِنْ عَلَقٍ * اقْرَأْ وَرَبُّكَ الْأَكْرَمُ * الَّذِي عَلَّمَ بِالْقَلَمِ * عَلَّمَ الْإِنْسَانَ مَا لَمْ يَعْلَمْ﴾</span>.</p>
+<p>عاد لخديجة يرتجف: <span style="font-style:italic;">"زملوني زملوني"</span>. ذهبت به لابن عمها <span style="color:#B8941F;font-weight:bold;">ورقة بن نوفل</span> (وكان شيخاً كبيراً قد تنصر ويكتب الكتاب العبراني)، فقال: "هذا الناموس الذي أنزل على موسى، يا ليتني فيها جذعاً (شاباً)، يا ليتني أكون حياً إذ يخرجك قومك". تمنى أن يعيش لنصرته. مات ورقة بعد أيام وانقطع الوحي (فترة الوحي).</p>
+<p><span style="color:#B8941F;font-weight:bold;">مراحل الدعوة:</span> دعوة سرية (3 سنوات) في دار الأرقم بن أبي الأرقم (عند الصفا). أول من آمن: خديجة (أول النساء)، علي بن أبي طالب (أول الصبيان، 10 سنوات)، زيد بن حارثة (أول الموالي)، أبو بكر الصديق (أول الرجال). ثم الجهر بالدعوة. بدأ الاضطهاد. هجرة الحبشة الأولى (سنة 5 للبعثة: 11 رجلاً و4 نساء)، ثم الثانية (83 رجلاً و18 امرأة). مقاطعة بني هاشم في شعب أبي طالب (3 سنوات: السنة 7-10 للبعثة). <span style="color:#B8941F;font-weight:bold;">عام الحزن</span> (سنة 10 للبعثة): وفاة أبي طالب (عن 80 سنة) وخديجة (عن 65 سنة). رحلة الطائف المؤلمة (طلب النصرة فردوه وآذوه). <span style="color:#B8941F;font-weight:bold;">الإسراء والمعراج</span> (ليلة 27 رجب سنة 11 للبعثة): من المسجد الحرام إلى المسجد الأقصى ثم إلى السماوات العلى (فرضت الصلوات الخمس). بيعة العقبة الأولى (12 رجلاً) والثانية (73 رجلاً وامرأتان). <span style="color:#B8941F;font-weight:bold;">الهجرة النبوية</span> (12 ربيع الأول سنة 13 للبعثة): خرج مع أبي بكر واختبأ في غار ثور 3 أيام (والعنكبوت والحمامتان). وصل قباء (قبل المدينة) وأسس أول مسجد في الإسلام.</p>`,
+
+  "الأبناء": `<h3>👨‍👩‍👧 أبناؤه وبناته</h3>
+<p><span style="color:#B8941F;font-weight:bold;">الذكور (3):</span> <strong>القاسم</strong> (أكبرهم، به كُني أبا القاسم، توفي صغيراً قبل البعثة وعمره 17 شهراً). <strong>عبد الله</strong> (الطيب الطاهر، ولد في الإسلام ومات صغيراً). <strong>إبراهيم</strong> (من مارية القبطية، ولد في ذي الحجة سنة 8 هـ بالعالية في المدينة، توفي سنة 10 هـ وعمره 18 شهراً. بكى النبي وقال: "إن العين لتدمع وإن القلب ليحزن وإنا لفراقك يا إبراهيم لمحزونون". وكان موته يوم كسفت الشمس، فقال الناس: كسفت لموت إبراهيم، فقال: "إن الشمس والقمر آيتان من آيات الله لا ينكسفان لموت أحد ولا لحياته").</p>
+<p><span style="color:#B8941F;font-weight:bold;">الإناث (4):</span> <strong>زينب</strong> (كبرى بناته، تزوجها أبو العاص بن الربيع ابن خالتها هالة، توفيت سنة 8 هـ). <strong>رقية</strong> (تزوجها عثمان بن عفان، هاجرت للحبشة مرتين، توفيت يوم غزوة بدر والنبي في بدر). <strong>أم كلثوم</strong> (تزوجها عثمان بعد وفاة أختها رقية، توفيت سنة 9 هـ). <strong>فاطمة الزهراء</strong> (أصغرهن وأحبهن إليه، سيدة نساء العالمين، تزوجها علي بن أبي طالب في السنة 2 هـ، أم الحسن والحسين وزينب وأم كلثوم، توفيت بعد النبي بـ6 أشهر وهي بضعة النبي، قال عنها: "فاطمة بضعة مني، فمن أغضبها أغضبني").</p>`,
+
+  "الزوجات": `<h3>💍 أمهات المؤمنين</h3>
+<p>1. <span style="color:#B8941F;font-weight:bold;">خديجة بنت خويلد</span>: أحب زوجاته، أم أولاده، تزوجها 25 سنة ولم يتزوج عليها حتى ماتت. 2. <span style="color:#B8941F;font-weight:bold;">سودة بنت زمعة</span>: أرملة مهاجرة. 3. <span style="color:#B8941F;font-weight:bold;">عائشة بنت أبي بكر</span>: أفقه النساء، تزوجها بكراً، أحب زوجاته بعد خديجة. 4. <span style="color:#B8941F;font-weight:bold;">حفصة بنت عمر</span>: حارسة المصحف (أول مصحف كُتب). 5. <span style="color:#B8941F;font-weight:bold;">زينب بنت خزيمة</span>: أم المساكين. 6. <span style="color:#B8941F;font-weight:bold;">أم سلمة</span>: آخر من مات من زوجاته. 7. <span style="color:#B8941F;font-weight:bold;">زينب بنت جحش</span>: نزل حجابها من السماء. 8. <span style="color:#B8941F;font-weight:bold;">جويرية بنت الحارث</span>: أعتق بسببها 100 بيت من قومها. 9. <span style="color:#B8941F;font-weight:bold;">أم حبيبة</span>: بنت أبي سفيان. 10. <span style="color:#B8941F;font-weight:bold;">صفية بنت حيي</span>: من نسل هارون عليه السلام. 11. <span style="color:#B8941F;font-weight:bold;">ميمونة بنت الحارث</span>: آخر من تزوج بها.</p>
+<p>أمتان (سريّتان): <span style="color:#B8941F;font-weight:bold;">مارية القبطية</span> (أم إبراهيم، أهداها له المقوقس حاكم مصر)، <span style="color:#B8941F;font-weight:bold;">ريحانة</span> من بني قريظة.</p>`,
+
+  "الغزوات": `<h3>⚔️ الغزوات والسرايا</h3>
+<p>بلغ عدد <span style="color:#B8941F;font-weight:bold;">الغزوات 27 غزوة</span> (قاتل صلى الله عليه وسلم في 9 منها) و<span style="color:#B8941F;font-weight:bold;">السرايا 47 سرية</span>.</p>
+<p><span style="color:#B8941F;font-weight:bold;">أهم المعارك:</span> <strong>بدر الكبرى</strong> (17 رمضان 2 هـ): 313 مسلماً مقابل 1000 مشرك. أول انتصار كبير. مقتل صناديد قريش (أبو جهل، أمية بن خلف، عتبة وشيبة ابنا ربيعة). نصر إلهي بالملائكة. <strong>أحد</strong> (15 شوال 3 هـ): 700 مسلم مقابل 3000 مشرك. استشهاد 70 رجلاً منهم حمزة سيد الشهداء. كسرت رباعيته الشريفة وشُج وجهه. <strong>الخندق</strong> (شوال 5 هـ): محاصرة 10 آلاف مقاتل للمدينة. حفر الخندق بمشورة سلمان الفارسي. ردهم الله بالريح والملائكة. <strong>بني قريظة</strong> (5 هـ). <strong>الحديبية</strong> (6 هـ): صلح الحديبية وبيعة الرضوان. <strong>خيبر</strong> (محرم 7 هـ): فتح حصون اليهود. قال: "لأعطين الراية غداً رجلاً يحب الله ورسوله ويحبه الله ورسوله" فأعطاها علياً. <strong>مؤتة</strong> (8 هـ): استشهاد زيد وجعفر وابن رواحة. <strong>فتح مكة</strong> (20 رمضان 8 هـ): دخلها في 10 آلاف صحابي. عفو عام: "اذهبوا فأنتم الطلقاء". تطهير الكعبة من 360 صنماً. <strong>حنين</strong> (شوال 8 هـ): 12 ألف مسلم. <strong>تبوك</strong> (رجب 9 هـ): غزوة العسرة، آخر غزوة، 30 ألف مقاتل في حر شديد. <strong>حجة الوداع</strong> (10 هـ): خطبته العظيمة في عرفة.</p>`,
+
+  "الأخلاق": `<h3>✨ أخلاقه وصفاته</h3>
+<p>قالت عائشة رضي الله عنها: <span style="color:#B8941F;font-weight:bold;font-style:italic;">"كان خلقه القرآن"</span>. جمع كل مكارم الأخلاق. كان خلقه الاستقامة والحياء والشجاعة والتواضع والجود والوفاء والرحمة والزهد والصدق. ما خُير بين أمرين إلا اختار أيسرهما ما لم يكن إثماً. ما انتقم لنفسه قط. كان يخصف نعله ويرقع ثوبه ويحلب شاته ويخدم أهله ويسلم على الصبيان. ما شبع ثلاثة أيام تباعاً من خبز بر حتى لقي الله.</p>
+<p><span style="color:#B8941F;font-weight:bold;">وصفه الجسدي:</span> أبيض مشرب بحمرة. ليس بالطويل البائن ولا القصير. عظيم الرأس والهامة. رجل الشعر ليس بالجعد ولا السبط. واسع الجبين. أزج الحاجبين سابغهما. أقنى الأنف. كث اللحية. واسع الفم. مفلج الأسنان. بعيد ما بين المنكبين. خاتم النبوة بين كتفيه (بضعة ناشزة مثل بيضة الحمامة). إذا مشى تكفأ كأنما ينحدر من صبب. ما رآه أحد إلا هابه، وما جالسه أحد إلا أحبه.</p>`,
+
+  "الوفاة": `<h3>🕊️ وفاته صلى الله عليه وسلم</h3>
+<p>بعد حجة الوداع وخطبته العظيمة، بدأ الوحي ينزل عليه في أواخر صفر سنة 11 هـ: <span style="font-style:italic;">﴿إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ﴾</span>. علم بقرب أجله. اشتد عليه الصداع (كان مرضه ذات الجنب أو الحمى) وهو في بيت ميمونة. استأذن زوجاته أن يمرَّض في بيت عائشة.</p>
+<p>قبل 5 أيام من وفاته، ارتفعت حرارته. أمر أبا بكر أن يصلي بالناس (صلى 17 صلاة). في يوم الخميس (قبل وفاته بـ4 أيام) قال: "ائتوني بكتف ودواة أكتب لكم كتاباً لا تضلون بعدي"، فاختلف الصحابة، فقال عمر: "حسبنا كتاب الله".</p>
+<p>في <span style="color:#B8941F;font-weight:bold;">يوم الاثنين 12 ربيع الأول سنة 11 هـ</span> (8 يونيو 632م)، دخلت فاطمة فقالت: "واكرباه!"، فقال: "لا كرب على أبيك بعد اليوم". كان يقول: "لا إله إلا الله، إن للموت سكرات". كان يشير للصلاة: "الصلاة الصلاة وما ملكت أيمانكم". سمعته عائشة يردد بصوت خافت: <span style="color:#B8941F;font-weight:bold;font-style:italic;">"بل الرفيق الأعلى من الجنة"</span>. مات بين سحر عائشة ونحرها. آخر ما دخل جوفه ريق عائشة (مضغت له سواكاً وطيبته).</p>
+<p>الغسل: علي بن أبي طالب، والعباس، والفضل، وقثم، وأسامة، وشقران. الكفن: 3 أثواب بيض سحولية قطنية. الدفن: في حفرة لحد في حجرة عائشة (مكان وفاته). خطبة أبي بكر الصديق رضي الله عنه: <span style="font-style:italic;">"أما بعد، من كان يعبد محمداً فإن محمداً قد مات، ومن كان يعبد الله فإن الله حي لا يموت. ﴿وَمَا مُحَمَّدٌ إِلَّا رَسُولٌ قَدْ خَلَتْ مِن قَبْلِهِ الرُّسُلُ أَفَإِن مَّاتَ أَوْ قُتِلَ انقَلَبْتُمْ عَلَىٰ أَعْقَابِكُمْ﴾"</span>.</p>
+<p>توفي وعمره <span style="color:#B8941F;font-weight:bold;">63 سنة</span> (40 قبل النبوة + 13 في مكة + 10 في المدينة). إرثه: بغلته البيضاء، سلاحه، وأرض فدك جعلها صدقة. صلى الله عليه وعلى آله وصحبه وسلم تسليماً كثيراً.</p>`
+};
+
+const prophetsFullData = {
+  "آدم": {f:null, t:"أبو البشر", d:"أول الأنبياء وأول البشر. خلقه الله بيده ونفخ فيه من روحه. علمه الأسماء كلها. أسكنه الجنة هو وزوجه حواء. أهبطه الله إلى الأرض. عاش 960 سنة."},
+  "إدريس": {f:null, t:"أول نبي بعد آدم", d:"هو جد نوح. رفعه الله مكاناً علياً في السماء الرابعة. أول من خط بالقلم وخاط الثياب. علمه الله الفلك والحساب."},
+  "نوح": {f:null, t:"أول الرسل", d:"أول رسول بعثه الله لأهل الأرض. لبث في قومه 950 سنة يدعوهم. بنى السفينة بأمر الله. نجاه الله ومن آمن معه من الطوفان. استقرت السفينة على جبل الجودي."},
+  "هود": {f:null, t:"نبي عاد", d:"أرسل إلى قوم عاد الذين كانوا يسكنون الأحقاف. كانوا أشد الناس أجساماً. كذبوه فأهلكهم الله بريح صرصر عاتية."},
+  "صالح": {f:null, t:"نبي ثمود", d:"أرسل إلى ثمود بالحجر. معجزته الناقة التي أخرجها الله من صخرة. عقروها فأهلكهم الله بالصيحة."},
+  "إبراهيم": {f:null, t:"خليل الله", d:"أبو الأنبياء. حطم الأصنام وألقي في النار فكانت برداً وسلاماً. بنى الكعبة مع ابنه إسماعيل. جادل قومه بالحجة."},
+  "لوط": {f:null, t:"ابن أخي إبراهيم", d:"هاجر مع عمه إبراهيم. أرسل إلى قوم سدوم. آمن به قليل. نجاه الله وأهله آخر الليل إلا امرأته."},
+  "إسماعيل": {f:"إبراهيم", t:"الذبيح", d:"ابن إبراهيم من هاجر. أمر الله إبراهيم بتركه وأمه في واد غير ذي زرع. فجر الله له ماء زمزم. ساعد أباه في بناء الكعبة. من نسله العرب."},
+  "إسحاق": {f:"إبراهيم", t:"ابن إبراهيم", d:"بشرت به الملائكة إبراهيم وسارة. ولد بعد إسماعيل. أبو يعقوب. هو أبو بني إسرائيل."},
+  "يعقوب": {f:"إسحاق", t:"إسرائيل", d:"له 12 ولداً هم الأسباط. منهم يوسف. أحب يوسف حباً شديداً. جمع شمله بيوسف في مصر. توفي وعمره 147 سنة."},
+  "يوسف": {f:"يعقوب", t:"الصديق", d:"أوتي شطر الحسن. رأى رؤيا 11 كوكباً. ألقي في الجب وبغ عبداً. دخل السجن 7 سنين. فسر رؤيا الملك وأصبح عزيز مصر. جمع شمله بأبيه وإخوته."},
+  "أيوب": {f:null, t:"نبي الصبر", d:"ضُرب به المثل في الصبر. ابتلي في جسده وماله وأهله 18 سنة. شفاه الله ورد له أهله وماله."},
+  "شعيب": {f:null, t:"خطيب الأنبياء", d:"أرسل إلى مدين. كانوا ينقصون المكيال والميزان. كان أفصح الأنبياء. تزوج موسى ابنته."},
+  "موسى": {f:null, t:"كليم الله", d:"أكثر الأنبياء ذكراً في القرآن. ولد في مصر وألقي في النهر. كلمه الله عند الشجرة. أرسل إلى فرعون. معجزاته: العصا، اليد البيضاء، انفلاق البحر. أنزلت عليه التوراة."},
+  "هارون": {f:null, t:"أخو موسى", d:"سأل موسى ربه أن يشركه في أمره. كان فصيح اللسان. استخلفه موسى على بني إسرائيل. مات قبل موسى."},
+  "داود": {f:null, t:"نبي وملك", d:"أنزل عليه الزبور. ألان الله له الحديد. سخرت له الجبال والطير تسبح معه. قتل جالوت. كان يصوم يوماً ويفطر يوماً."},
+  "سليمان": {f:"داود", t:"الملك النبي", d:"سخرت له الريح والجن والطير. علم منطق الطير. قصة الهدهد وبلقيس. ملكه لم يؤته أحد قبله ولا بعده."},
+  "إلياس": {f:null, t:"", d:"أرسل إلى بني إسرائيل. دعاهم لعبادة الله وترك البعل."},
+  "اليسع": {f:null, t:"", d:"خليفة إلياس. أوحى الله إليه. دعا قومه."},
+  "يونس": {f:null, t:"ذي النون", d:"أرسل إلى نينوى. خرج غاضباً. التقمه الحوت. نادى في الظلمات: لا إله إلا أنت سبحانك. نجاه الله وآمن قومه."},
+  "زكريا": {f:null, t:"كفل مريم", d:"كان نجاراً. بشرته الملائكة بيحيى. استشهد."},
+  "يحيى": {f:"زكريا", t:"النبي الشهيد", d:"لم يُجعل له من قبل سمياً. كان حصوراً تقياً. استشهد."},
+  "عيسى": {f:null, t:"روح الله", d:"خلق من غير أب. تكلم في المهد. معجزاته: يحيي الموتى، يبرئ الأكمه والأبرص. رفعه الله إليه. سينزل آخر الزمان."},
+  "محمد ﷺ": {f:null, t:"خاتم الأنبياء", d:"سيد ولد آدم. صاحب الشفاعة العظمى. أرسله الله رحمة للعالمين. ولد بمكة عام الفيل. نزل عليه الوحي في غار حراء. هاجر للمدينة. أنزل عليه القرآن الكريم. توفي وعمره 63 سنة.", s:true}
+};
+
+const mawaqefData = {
+  "الصديق في الغار": `<h3>🕳️ الصديق في الغار - أبو بكر الصديق</h3>
+<p>لما أذن الله لنبيه ﷺ بالهجرة إلى المدينة، خرج مع <span style="color:#B8941F;font-weight:bold;">أبي بكر الصديق</span> رضي الله عنه في ليلة 27 صفر. وصلا إلى غار ثور (جنوب مكة)، فدخله أبو بكر أولاً لينظر هل فيه شيء يؤذي النبي، فسد الثقوب بثوبه. جاءت قريش تبحث عنهما ووقفت على باب الغار. قال أبو بكر: "لو نظر أحدهم تحت قدميه لرآنا". فقال النبي ﷺ: <span style="font-style:italic;">"يا أبا بكر، ما ظنك باثنين الله ثالثهما؟"</span> وأنزل الله: ﴿إِلَّا تَنصُرُوهُ فَقَدْ نَصَرَهُ اللَّهُ إِذْ أَخْرَجَهُ الَّذِينَ كَفَرُوا ثَانِي اثْنَيْنِ إِذْ هُمَا فِي الْغَارِ إِذْ يَقُولُ لِصَاحِبِهِ لَا تَحْزَنْ إِنَّ اللَّهَ مَعَنَا﴾. بقي ثلاث ليال، تأتيهما أسماء بنت أبي بكر بالطعام، وعامر بن فهيرة بالغنم لتمحو آثار الأقدام. قال النبي ﷺ لأبي بكر: "أنت صاحبي في الغار، وصاحبي على الحوض".</p>`,
+
+  "الفداء يوم بدر": `<h3>⚔️ الفداء يوم بدر - سعد بن معاذ</h3>
+<p>في غزوة بدر، قال <span style="color:#B8941F;font-weight:bold;">سعد بن معاذ</span> رضي الله عنه سيد الأوس للنبي ﷺ: "يا رسول الله، لقد آمنا بك وصدقناك، وشهدنا أن ما جئت به هو الحق، وأعطيناك على ذلك عهودنا ومواثيقنا على السمع والطاعة. فامض يا رسول الله لما أردت، فوالذي بعثك بالحق، لو استعرضت بنا هذا البحر فخضته لخضناه معك، ما تخلف منا رجل واحد. وإنا لصبر عند الحرب، صدق عند اللقاء. لعل الله يريك منا ما تقر به عينك، فسر بنا على بركة الله". فتهلل وجه النبي ﷺ وقال: "سيروا وأبشروا".</p>`,
+
+  "قتيل القرآن": `<h3>📖 قتيل القرآن - خبيب بن عدي</h3>
+<p>في سرية الرجيع، أسر المشركون <span style="color:#B8941F;font-weight:bold;">خبيب بن عدي</span> رضي الله عنه. قبل قتله، طلب أن يصلي ركعتين. قال: "والله لولا أن تظنوا أني إنما طولت جزعاً من القتل لاستكثرت من الصلاة". رفع على خشبة، فقال: "اللهم إنا قد بلغنا رسالة رسولك، فبلغه الغداة ما يصنع بنا". التفت إلى المشركين وقال: "اللهم أحصهم عدداً، واقتلهم بدداً، ولا تغادر منهم أحداً". ثم أنشد: "ولست أبالي حين أقتل مسلماً... على أي شق كان لله مصرعي". ولما رفع على الخشبة نادى: "يا محمد"، فقال النبي ﷺ في مجلسه بالمدينة: "وعليك السلام يا خبيب"، وأخبر الصحابة أنه قتل.</p>`,
+
+  "مؤذن الرسول": `<h3>🕌 مؤذن الرسول - بلال بن رباح</h3>
+<p><span style="color:#B8941F;font-weight:bold;">بلال بن رباح</span> رضي الله عنه، عبد حبشي اشتراه أبو بكر وأعتقه. كان يعذب في رمضاء مكة، توضع الصخرة العظيمة على صدره، ولا يقول إلا: "أحد أحد". اختاره النبي ﷺ ليكون أول مؤذن في الإسلام. بعد فتح مكة، صعد ظهر الكعبة وأذن بأعلى صوته. نظر عمر إلى أبي بكر وقال: "أعتقت عبداً فصار سيداً". ولما توفي النبي ﷺ، لم يستطع بلال البقاء في المدينة من شدة حزنه. استأذن أبا بكر في الخروج للجهاد في الشام. لما زار المدينة بعد سنوات وطلب منه الصحابة أن يؤذن، وعندما قال: "الله أكبر"، ارتجت المدينة بالبكاء، وتذكر الناس أيام النبي ﷺ.</p>`,
+
+  "ليلة الهجرة": `<h3>🛡️ ليلة الهجرة - علي بن أبي طالب</h3>
+<p>في ليلة الهجرة، أحاط المشركون ببيت النبي ﷺ ليقتلوه. أمر النبي ﷺ <span style="color:#B8941F;font-weight:bold;">علي بن أبي طالب</span> رضي الله عنه أن ينام في فراشه ويتغطى ببرده الأخضر. قال له: "نم في فراشي، واتشح ببردي هذا الحضرمي الأخضر، فإنه لن يخلص إليك شيء تكرهه منهم". نام علي في فراش النبي ﷺ فداءً له. خرج النبي ﷺ من بينهم وقرأ: ﴿وَجَعَلْنَا مِن بَيْنِ أَيْدِيهِمْ سَدًّا وَمِنْ خَلْفِهِمْ سَدًّا فَأَغْشَيْنَاهُمْ فَهُمْ لَا يُبْصِرُونَ﴾. لما أصبحوا ورأوا علياً، عرفوا أن النبي قد خرج. بقي علي في مكة 3 أيام بعد الهجرة ليرد الودائع والأمانات التي كانت عند النبي ﷺ إلى أهلها.</p>`,
+
+  "سيف الله المسلول": `<h3>🗡️ سيف الله المسلول - خالد بن الوليد</h3>
+<p><span style="color:#B8941F;font-weight:bold;">خالد بن الوليد</span> رضي الله عنه، قائد عسكري فذ. أسلم قبل فتح مكة. في غزوة مؤتة، بعد استشهاد القادة الثلاثة (زيد وجعفر وابن رواحة)، أخذ الراية خالد واستطاع بحنكته العسكرية أن ينسحب بالجيش بسلام. قال النبي ﷺ: <span style="font-style:italic;">"اللهم إنه سيف من سيوفك، فانصره"</span>. من يومها لُقب بـ"سيف الله المسلول". شارك في فتح مكة، وحنين، والطائف، وتبوك. وقاد جيوش الفتح في العراق والشام. في معركة اليرموك، قاد 36 ألف مسلم ضد 240 ألف من الروم، وانتصر. قال على فراش موته: "لقد شهدت مئة زحف أو زهاءها، وما في جسدي موضع شبر إلا وفيه ضربة بسيف أو رمية بسهم أو طعنة برمح، وها أنا أموت على فراشي كما يموت البعير، فلا نامت أعين الجبناء".</p>`,
+
+  "استجابة الدعاء": `<h3>🤲 استجابة الدعاء - سعد بن معاذ</h3>
+<p><span style="color:#B8941F;font-weight:bold;">سعد بن معاذ</span> رضي الله عنه، سيد الأوس. أسلم على يد مصعب بن عمير. في غزوة الخندق، رماه أحد المشركين بسهم فقطع أكحله (عرق في الذراع). قال: "اللهم لا تمتني حتى تقر عيني من بني قريظة". استجاب الله دعاءه. بعد غزوة الخندق، حاصر المسلمون بني قريظة، وكان سعد هو الحكم فيهم. حكم بقتل مقاتليهم وسبي ذراريهم. قال له النبي ﷺ: "لقد حكمت فيهم بحكم الله من فوق سبع سماوات". بعدها انفجر عرقه، ومات شهيداً. قال النبي ﷺ: "اهتز عرش الرحمن لموت سعد بن معاذ". وشيع جنازته 70 ألف ملك.</p>`,
+
+  "إنفاق عثمان": `<h3>💰 إنفاق عثمان بن عفان</h3>
+<p>في غزوة تبوك (غزوة العسرة)، حث النبي ﷺ على الإنفاق. قال <span style="color:#B8941F;font-weight:bold;">عثمان بن عفان</span> رضي الله عنه: "عليَّ مئة بعير بأحلاسها وأقتابها في سبيل الله". ثم قال: "عليَّ مئة أخرى". حتى بلغ 300 بعير. وجاء بألف دينار وصبها في حجر النبي ﷺ. فجعل النبي يقلبها بيده ويقول: <span style="font-style:italic;">"ما ضر عثمان ما عمل بعد اليوم"</span> (مرتين). وفي المدينة، أراد المسلمون توسعة المسجد النبوي، فاشترى عثمان الأرض المجاورة للمسجد بـ 20 ألف درهم. قال النبي ﷺ: "من يشتري بئر رومة فيجعلها للمسلمين؟" فاشتراها عثمان بـ 35 ألف درهم وجعلها للمسلمين. وقال ﷺ: "من حفر بئر رومة فله الجنة".</p>`,
+
+  "العارية المؤداة": `<h3>🕊️ العارية المؤداة - أبو هريرة</h3>
+<p><span style="color:#B8941F;font-weight:bold;">أبو هريرة</span> رضي الله عنه (عبد الرحمن بن صخر الدوسي)، أسلم سنة 7 هـ. كان من أشد الناس فقراً. قال: "كنت ألزم النبي ﷺ لشبع بطني، حتى كان بعض الصحابة يقول: إن أبا هريرة أكثر الحديث عن رسول الله". قال له النبي ﷺ يوماً: "يا أبا هريرة، ألا تسألني من هذه الغنائم؟" قال: أسألك أن تعلمني مما علمك الله. سأل النبي ﷺ أن يدعو له بالبركة. كان يحفظ كل ما يسمع من النبي ﷺ. قال: "شكوت إلى رسول الله ﷺ أني أنسى الحديث، فقال: ابسط رداءك. فبسطته، فجعل يحدثني، ثم قال: ضمه إلى صدرك. فضممته، فما نسيت حديثاً بعده". هو أكثر الصحابة رواية للحديث (5374 حديثاً).</p>`,
+
+  "غزوة مؤتة": `<h3>⚔️ غزوة مؤتة - جعفر بن أبي طالب</h3>
+<p>في جمادى الأولى سنة 8 هـ، أرسل النبي ﷺ جيشاً لمؤتة (جنوب الأردن). أمر عليهم <span style="color:#B8941F;font-weight:bold;">زيد بن حارثة</span>، فإن أصيب فـ<span style="color:#B8941F;font-weight:bold;">جعفر بن أبي طالب</span>، فإن أصيب فـ<span style="color:#B8941F;font-weight:bold;">عبد الله بن رواحة</span>. استشهد زيد حامل الراية، فأخذها جعفر. قاتل قتالاً شديداً وهو يقول: "يا حبذا الجنة واقترابها... طيبة وبارداً شرابها". قطعت يمينه فأخذ الراية بشماله، فقطعت شماله فاحتضن الراية بصدره حتى استشهد. وجد فيه 70 جرحاً. قال النبي ﷺ: "لقد رأيت جعفراً في الجنة، له جناحان ملطخان بالدماء، مصبوغ القوادم، يطير بهما حيث شاء". لُقب بـ "جعفر الطيار" و"ذي الجناحين". استشهد عبد الله بن رواحة بعده. فأخذ الراية <span style="color:#B8941F;font-weight:bold;">خالد بن الوليد</span> وانسحب بالجيش.</p>`
+};
+
+const azkarData = {
+  morning:["أصبحنا وأصبح الملك لله","اللهم بك أصبحنا وبك أمسينا","اللهم أنت ربي لا إله إلا أنت","سبحان الله وبحمده (100)","لا إله إلا الله وحده لا شريك له (10)","اللهم إني أسألك علماً نافعاً"],
+  evening:["أمسينا وأمسى الملك لله","اللهم بك أمسينا وبك أصبحنا","أعوذ بكلمات الله التامات (3)","سبحان الله وبحمده (100)"],
+  afterPrayer:["أستغفر الله (3)","اللهم أنت السلام ومنك السلام","سبحان الله (33) الحمد لله (33) الله أكبر (33)","آية الكرسي","الإخلاص والمعوذات"]
+};
+
+// ==================== الحالة ====================
+let tasbeehCount = +(localStorage.getItem('tc')||0);
+let salawatCount = +(localStorage.getItem('sc')||0);
+let activeProphet = null;
+let activeHadith = null;
+
+let currentPrayerTimes = {};
+
+function navigateTo(id) {
+    // 1. إخفاء الشاشة الرئيسية فوراً
+    document.getElementById('homeScreen').style.display = 'none';
+
+    // 2. إخفاء جميع الأقسام بقوة (display:none) وليس فقط إزالة active
+    document.querySelectorAll('.section').forEach(el => {
+        el.classList.remove('active');
+        el.style.display = 'none';
+    });
+
+    // 3. إظهار القسم المطلوب فقط
+    const target = document.getElementById(id + 'Section');
+    if (target) {
+        target.classList.add('active');
+        target.style.display = 'block';
+    }
+
+    // 4. استدعاء دوال تحميل المحتوى
+    if (id === 'quran') renderSurahList();
+    if (id === 'hadith') renderHadith();
+    if (id === 'audio') initAudio();
+    if (id === 'prayer') startPrayers();
+    if (id === 'seerah') initSeerah();
+    if (id === 'azkar') { updateTasbeeh(); showAzkarType('morning'); }
+    if (id === 'wird') renderTasks();
+    if (id === 'ruqyah') renderRuqyah();
+    if (id === 'stories') renderProphets();
+    if (id === 'mawaqef') initMawaqef();
+}
+
+function goHome() {
+    // 1. إخفاء جميع الأقسام بقوة
+    document.querySelectorAll('.section').forEach(el => {
+        el.classList.remove('active');
+        el.style.display = 'none';
+    });
+
+    // 2. إظهار الشاشة الرئيسية
+    document.getElementById('homeScreen').style.display = 'block';
+
+    // 3. إيقاف أي مؤقتات
+    if (prayerTimer) {
+        clearInterval(prayerTimer);
+        prayerTimer = null;
+    }
+}
+
+// ==================== القرآن ====================
+function renderSurahList() {
+  document.getElementById('surahList').style.display = 'block';
+  document.getElementById('surahContent').style.display = 'none';
+  document.getElementById('surahContent').innerHTML = '';
+  document.getElementById('surahList').innerHTML = surahNames.map((n, i) => 
+    `<div class="list-item" onclick="showSurah(${i+1})" style="display:flex;justify-content:space-between;align-items:center;">${i+1}. ${n} <span style="background:${meccanSurahs[i+1]?'#8B6914':'#1B4D3E'};color:white;padding:3px 12px;border-radius:15px;font-size:0.7rem;flex-shrink:0;margin-right:10px;">${meccanSurahs[i+1]?'🕋 مكية':'🕌 مدنية'}</span></div>`
+  ).join('');
+}
+
+async function showSurah(i) {
+  document.getElementById('surahList').style.display = 'none';
+  let c = document.getElementById('surahContent'); c.style.display = 'block'; c.innerHTML = 'جاري التحميل...';
+  try {
+    let r = await fetch(`https://api.alquran.cloud/v1/surah/${i}/quran-uthmani`), d = await r.json();
+    let ay = d.data.ayahs.map(a => `${a.text}<span class="ayah-number" onclick="showTafseer(${i},${a.numberInSurah})" title="تفسير">${a.numberInSurah}</span>`).join('');
+    c.innerHTML = `<div class="quran-page"><div class="surah-title-inner">سورة ${surahNames[i-1]}</div><div class="bismillah">﷽</div><div class="quran-ayahs">${ay}</div></div><button onclick="renderSurahList()" style="margin-top:15px;background:#1B4D3E;color:white;border:none;padding:12px;border-radius:25px;width:100%;">عودة للفهرس</button>`;
+  } catch { c.innerHTML = 'تعذر التحميل'; }
+}
+
+async function showTafseer(surah, ayah) {
+  document.getElementById('tafseerOverlay').style.display = 'block';
+  document.getElementById('tafseerPopup').style.display = 'block';
+  document.getElementById('tafseerContent').innerHTML = 'جاري تحميل التفسير...';
+  try {
+    let r = await fetch(`https://api.alquran.cloud/v1/ayah/${surah}:${ayah}/ar.muyassar`), d = await r.json();
+    document.getElementById('tafseerContent').innerHTML = `<p style="color:var(--deep-green);margin-bottom:10px;"><strong>سورة ${surahNames[surah-1]} - الآية ${ayah}</strong></p><p style="line-height:2.2;">${d.data.text}</p>`;
+  } catch { document.getElementById('tafseerContent').innerHTML = '<p>تعذر تحميل التفسير</p>'; }
+}
+
+function closeTafseer() {
+  document.getElementById('tafseerOverlay').style.display = 'none';
+  document.getElementById('tafseerPopup').style.display = 'none';
+}
+
+// ==================== الأحاديث ====================
+function renderHadith() {
+  document.getElementById('hadithContainer').innerHTML = hadithList.map((h, i) => `
+    <div class="hadith-card">
+      <div class="hadith-header" onclick="toggleHadith(${i})">
+        <div class="hadith-number">${h.n}</div>
+        <span>${h.t.substring(0, 60)}...</span>
+        <i class="fas fa-chevron-down" style="margin-right:auto;color:var(--gold);"></i>
+      </div>
+      <div class="hadith-full" id="hadithFull-${i}">${h.t}</div>
+    </div>
+  `).join('');
+  activeHadith = null;
+}
+
+function toggleHadith(i) {
+  let el = document.getElementById('hadithFull-' + i);
+  if (activeHadith !== null && activeHadith !== i) {
+    let prev = document.getElementById('hadithFull-' + activeHadith);
+    if (prev) prev.classList.remove('show');
+  }
+  if (el) { el.classList.toggle('show'); activeHadith = el.classList.contains('show') ? i : null; }
+}
+
+function initAudio() {
+  let s = document.getElementById('audioSurahSelect');
+  s.innerHTML = surahNames.map((n, i) => `<option value="${i+1}">${n}</option>`).join('');
+  switchReader(); // تهيئة الوضع الافتراضي
+}
+
+function switchReader() {
+  let reader = document.getElementById('readerSelect').value;
+  let player = document.getElementById('audioPlayer');
+  let controls = document.getElementById('abdulbasitControls');
+  let frame = document.getElementById('hiddenFrame');
+
+  if (reader === 'afasy') {
+    player.style.display = 'block';
+    controls.style.display = 'none';
+    frame.src = ''; // إيقاف الوسيط المخفي
+    playAudio(); // تشغيل السورة تلقائياً لمشاري
+  } else {
+    player.style.display = 'none';
+    player.pause();
+    controls.style.display = 'block';
+  }
+}
+
+function playAudio() {
+  let surah = document.getElementById('audioSurahSelect').value.padStart(3, '0');
+  let url = `https://server8.mp3quran.net/afs/${surah}.mp3`;
+  
+  let player = document.getElementById('audioPlayer');
+  player.src = url;
+  player.load(); // يبدأ التحميل فوراً
+  player.play().catch(() => {
+    // لو حصل خطأ، نجرب نشغل بعد لحظة
+    setTimeout(() => {
+      player.play().catch(() => {
+        alert('تعذر تشغيل الصوت. تأكد من اتصالك بالإنترنت.');
+      });
+    }, 1000);
+  });
+}
+
+function playAbdulbasit() {
+  let surah = document.getElementById('audioSurahSelect').value;
+  // رابط Quran.com مع التشغيل التلقائي للشيخ عبدالباسط
+  let url = `https://quran.com/ar/${surah}?reciter=2&autoplay=true`;
+  document.getElementById('hiddenFrame').src = url;
+}
+
+function stopAbdulbasit() {
+  document.getElementById('hiddenFrame').src = '';
+}
+// ==================== مواقيت الصلاة (نسخة بسيطة ومضمونة) ====================
+
+// ==================== مواقيت الصلاة الكاملة ====================
+let prayerTimer = null;
+
+async function startPrayers() {
+    // 1. تحديث التاريخ الهجري الحقيقي أولاً
+    updateHijriDate();
+
+    // 2. جلب إحداثيات الموقع الحالية
+    const { lat, lon } = await getUserLocation();
+
+    // 3. حساب أوقات الصلاة بناءً على الموقع والتاريخ
+    const today = new Date();
+    const times = getPrayerTimesByMath(today, lat, lon);
+    const names = { Fajr: 'الفجر', Dhuhr: 'الظهر', Asr: 'العصر', Maghrib: 'المغرب', Isha: 'العشاء' };
+
+    // 4. عرض الأوقات
+    displayPrayerTimes(times, names);
+
+    // 5. تشغيل العداد التنازلي
+    if (prayerTimer) clearInterval(prayerTimer);
+    updateCountdown();
+    prayerTimer = setInterval(updateCountdown, 1000);
+
+    // 6. (هام) تحديث العداد لاستخدام الأوقات الجديدة
+    window.currentTimes = times;
+}
+
+// دالة جلب الموقع
+function getUserLocation() {
+    return new Promise((resolve) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+                () => resolve({ lat: 30.0444, lon: 31.2357 }), // القاهرة كموقع افتراضي
+                { timeout: 5000 }
+            );
+        } else {
+            resolve({ lat: 30.0444, lon: 31.2357 });
+        }
+    });
+}
+
+// دالة عرض الصلوات
+function displayPrayerTimes(times, names) {
+    const colors = { Fajr:'#4A90D9', Dhuhr:'#F8C300', Asr:'#D0021B', Maghrib:'#7ED321', Isha:'#4A4A4A' };
+    const icons = { Fajr:'fa-cloud-moon', Dhuhr:'fa-sun', Asr:'fa-cloud-sun', Maghrib:'fa-cloud-sun-rain', Isha:'fa-moon' };
+    
+    let html = '';
+    for (let key of ['Fajr','Dhuhr','Asr','Maghrib','Isha']) {
+        html += `<div class="prayer-row" id="row-${key}">
+            <div class="prayer-name"><span class="prayer-icon" style="background:${colors[key]};"><i class="fas ${icons[key]}"></i></span>${names[key]}</div>
+            <span>${times[key]}</span>
+        </div>`;
+    }
+    document.getElementById('prayerTimesList').innerHTML = html;
+}
+
+// دالة العداد التنازلي
+function updateCountdown() {
+    let times = window.currentTimes || { Fajr: '04:30', Dhuhr: '12:00', Asr: '15:30', Maghrib: '18:15', Isha: '19:45' };
+    let now = new Date();
+    let names = { Fajr: 'الفجر', Dhuhr: 'الظهر', Asr: 'العصر', Maghrib: 'المغرب', Isha: 'العشاء' };
+    let nextKey = null, nextTime = null, nextName = '';
+
+    document.querySelectorAll('.prayer-row').forEach(r => r.classList.remove('next'));
+
+    for (let [key, timeStr] of Object.entries(times)) {
+        let [h, m] = timeStr.split(':').map(Number);
+        let prayerDate = new Date(now);
+        prayerDate.setHours(h, m, 0, 0);
+        if (prayerDate <= now) prayerDate.setDate(prayerDate.getDate() + 1);
+        if (!nextTime || prayerDate < nextTime) {
+            nextTime = prayerDate;
+            nextKey = key;
+            nextName = names[key];
+        }
+    }
+
+    if (nextKey && nextTime) {
+        let diff = Math.floor((nextTime - now) / 1000);
+        if (diff >= 0) {
+            let hh = String(Math.floor(diff / 3600)).padStart(2, '0');
+            let mm = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
+            let ss = String(diff % 60).padStart(2, '0');
+            document.getElementById('nextPrayerBox').innerHTML = `<div style="background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(27,77,62,0.1));border:2px solid var(--gold);border-radius:20px;padding:18px;text-align:center;"><p>الصلاة القادمة ⏳</p><h3 style="color:#1B4D3E;">${nextName}</h3><div style="font-size:2rem;font-weight:bold;color:#1B4D3E;">${hh}:${mm}:${ss}</div></div>`;
+            let row = document.getElementById('row-' + nextKey);
+            if (row) row.classList.add('next');
+        }
+    }
+}
+
+// دالة الحساب الرياضي لمواقيت الصلاة
+function getPrayerTimesByMath(date, lat, lon) {
+    let jd = (date.getTime() / 86400000) + 2440587.5;
+    let d = jd - 2451545.0;
+    let g = (357.529 + 0.98560028 * d) % 360;
+    let q = (280.459 + 0.98564736 * d) % 360;
+    let L = (q + 1.915 * Math.sin(g * Math.PI / 180) + 0.020 * Math.sin(2 * g * Math.PI / 180)) % 360;
+    let e = 23.439 - 0.00000036 * d;
+    let dec = Math.asin(Math.sin(e * Math.PI / 180) * Math.sin(L * Math.PI / 180)) * 180 / Math.PI;
+    let noon = 12 + (lon - q) / 15;
+    
+    let fajr = computeTime(noon, -19.5, dec, lat, false);
+    let dhuhr = noon;
+    let asr = computeAsr(noon, dec, lat);
+    let maghrib = computeTime(noon, -0.833, dec, lat, true);
+    let isha = computeTime(noon, -17.5, dec, lat, true);
+    
+    // إضافة 60 دقيقة لتعويض التوقيت الصيفي
+return { Fajr: formatTime(fajr + 1), Dhuhr: formatTime(dhuhr + 1), Asr: formatTime(asr + 1), Maghrib: formatTime(maghrib + 1), Isha: formatTime(isha + 1) };
+}
+
+function computeTime(noon, angle, dec, lat, isAfterNoon) {
+    let decRad = dec * Math.PI / 180, latRad = lat * Math.PI / 180, angleRad = angle * Math.PI / 180;
+    let cosHour = (Math.sin(angleRad) - Math.sin(latRad) * Math.sin(decRad)) / (Math.cos(latRad) * Math.cos(decRad));
+    cosHour = Math.max(-1, Math.min(1, cosHour));
+    let hour = Math.acos(cosHour) * 180 / Math.PI / 15;
+    return isAfterNoon ? noon + hour : noon - hour;
+}
+
+function computeAsr(noon, dec, lat) {
+    let decRad = dec * Math.PI / 180, latRad = lat * Math.PI / 180;
+    let angle = Math.atan(1 / (1 + Math.abs(Math.tan(latRad - decRad)))) * 180 / Math.PI;
+    return computeTime(noon, angle, dec, lat, true);
+}
+
+function formatTime(hours) {
+    if (hours < 0) hours += 24;
+    if (hours >= 24) hours -= 24;
+    let h = Math.floor(hours), m = Math.round((hours - h) * 60);
+    if (m === 60) { h++; m = 0; }
+    if (h >= 24) h -= 24;
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+}
+
+// دالة التاريخ الهجري
+function updateHijriDate() {
+    const today = new Date();
+    const jd = Math.floor(today.getTime() / 86400000 + 2440587.5);
+    const l = jd - 1948440 + 10632;
+    const n = Math.floor((l - 1) / 10631);
+    const l2 = l - 10631 * n + 354;
+    const j = Math.floor((10985 - l2) / 5316) * Math.floor((50 * l2) / 17719) + Math.floor(l2 / 5670) * Math.floor((43 * l2) / 15238);
+    const l3 = l2 - Math.floor((30 - j) / 15) * Math.floor((17719 * j) / 50) - Math.floor(j / 16) * Math.floor((15238 * j) / 43) + 29;
+    const month = Math.floor((24 * l3) / 709);
+    const day = Math.floor(l3 - Math.floor((709 * month) / 24));
+    const year = 30 * n + j - 30;
+    const months = ["محرم", "صفر", "ربيع الأول", "ربيع الآخر", "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة"];
+    document.getElementById('hijriDay').textContent = day;
+    document.getElementById('hijriMonthYear').textContent = months[month - 1] + ' ' + year + ' هـ';
+}
+
+// ==================== السيرة ====================
+function initSeerah() {
+  let keys = Object.keys(seerahData);
+  document.getElementById('seerahNav').innerHTML = keys.map(k => `<button onclick="showSeerah('${k}')" style="padding:8px;border:2px solid var(--gold);background:white;border-radius:18px;font-weight:bold;color:var(--deep-green);cursor:pointer;">${k}</button>`).join('');
+  showSeerah(keys[0]);
+}
+function showSeerah(k) { document.getElementById('seerahContent').innerHTML = seerahData[k]; }
+
+// ==================== الأذكار ====================
+function showAzkarType(t) { document.getElementById('azkarText').innerHTML = azkarData[t].map(z => `<div style="background:#FFFDF7;padding:12px;border-radius:14px;margin-bottom:8px;border-right:4px solid var(--gold);">📿 ${z}</div>`).join(''); }
+function incrementTasbeeh() { tasbeehCount++; localStorage.setItem('tc', tasbeehCount); updateTasbeeh(); if (navigator.vibrate) navigator.vibrate(50); }
+function resetTasbeeh() { tasbeehCount = 0; localStorage.setItem('tc', '0'); updateTasbeeh(); }
+function updateTasbeeh() { document.getElementById('tasbeehCircle').innerText = tasbeehCount; }
+
+// ==================== الورد ====================
+function renderTasks() {
+  let tasks = ['قراءة ورد من القرآن','أذكار الصباح والمساء','صلاة الفروض الخمسة','صلاة الضحى','الدعاء والاستغفار'];
+  document.getElementById('dailyTasks').innerHTML = tasks.map((t, i) => `<label style="display:flex;align-items:center;gap:10px;background:#F9F6F0;padding:12px;border-radius:14px;margin-bottom:8px;"><input type="checkbox" onchange="checkWird()"> ${t}</label>`).join('');
+  updateWird();
+}
+function checkWird() {
+  let done = document.querySelectorAll('#dailyTasks input:checked').length;
+  let p = Math.round((done / 5) * 100);
+  document.getElementById('progressFill').style.width = p + '%';
+  document.getElementById('progressText').innerText = p + '% مكتمل';
+  if (p === 100) { setTimeout(() => document.getElementById('celebration').style.display = 'flex', 300); }
+}
+function updateWird() { document.getElementById('progressFill').style.width = '0%'; document.getElementById('progressText').innerText = '0% مكتمل'; }
+
+// ==================== الرقية ====================
+function renderRuqyah() {
+  document.getElementById('ruqyahContent').innerHTML = `<div style="background:#FFF9EB;padding:18px;border-radius:15px;margin-bottom:15px;"><h4>📖 سورة الفاتحة</h4><p style="line-height:2.5;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ (1) الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ (2) الرَّحْمَٰنِ الرَّحِيمِ (3) مَالِكِ يَوْمِ الدِّينِ (4) إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ (5) اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ (6) صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ (7)</p></div><div style="background:#FFF9EB;padding:18px;border-radius:15px;margin-bottom:15px;"><h4>📖 آية الكرسي</h4><p style="line-height:2.5;">اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ</p></div><div style="background:#FFF9EB;padding:18px;border-radius:15px;"><h4>📖 المعوذات</h4><p style="line-height:2.5;">قُلْ هُوَ اللَّهُ أَحَدٌ... قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ... قُلْ أَعُوذُ بِرَبِّ النَّاسِ...</p></div>`;
+}
+
+// ==================== شجرة الأنبياء ====================
+function renderProphets() {
+  let html = '';
+  for (let [name, data] of Object.entries(prophetsFullData)) {
+    html += `<div onclick="toggleProphet('${name}')" class="prophet-node" style="${data.s ? 'font-size:1.2rem;font-weight:bold;background:linear-gradient(135deg,#B8941F,#D4AF37);' : ''}">${name} عليه السلام<br><small>${data.t || ''}</small></div><div class="prophet-detail" id="detail-${name}"><p>${data.d}</p>${data.f ? `<p style="margin-top:5px;"><strong>والده:</strong> ${data.f} عليه السلام</p>` : ''}</div>`;
+  }
+  document.getElementById('prophetsTree').innerHTML = html;
+  document.querySelectorAll('.prophet-detail').forEach(el => el.style.display = 'none');
+}
+
+function toggleProphet(name) {
+  let el = document.getElementById('detail-' + name);
+  if (!el) return;
+  if (activeProphet && activeProphet !== name) {
+    let prev = document.getElementById('detail-' + activeProphet);
+    if (prev) prev.style.display = 'none';
+  }
+  if (el.style.display === 'none' || el.style.display === '') {
+    el.style.display = 'block';
+    activeProphet = name;
+  } else {
+    el.style.display = 'none';
+    activeProphet = null;
+  }
+}
+
+// ==================== مواقف الصحابة ====================
+function initMawaqef() {
+  let keys = Object.keys(mawaqefData);
+  document.getElementById('mawaqefNav').innerHTML = keys.map(k => `<button onclick="showMawaqef('${k}')" style="padding:8px;border:2px solid var(--gold);background:white;border-radius:18px;font-weight:bold;color:var(--deep-green);cursor:pointer;">${k}</button>`).join('');
+  showMawaqef(keys[0]);
+}
+function showMawaqef(k) { document.getElementById('mawaqefContent').innerHTML = mawaqefData[k]; }
+
+// ==================== الصلاة على النبي ====================
+function sendSalawat() { salawatCount++; localStorage.setItem('sc', salawatCount); updateSalawatDisplay(); }
+function resetSalawat() { salawatCount = 0; localStorage.setItem('sc', '0'); updateSalawatDisplay(); }
+function updateSalawatDisplay() { document.getElementById('salawatCounter').textContent = 'عدد الصلوات: ' + salawatCount; }
+function closeCelebration() {
+  document.getElementById('celebration').style.display = 'none';
+  document.querySelectorAll('#dailyTasks input').forEach(cb => cb.checked = false);
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('progressText').innerText = '0% مكتمل';
+}
+
+// ==================== دعم زر الرجوع ====================
+window.addEventListener('popstate', function(e) {
+  if (e.state && e.state.section) { navigateTo(e.state.section); }
+  else { goHome(); }
+});
+
+// ==================== تهيئة ====================
+updateTasbeeh();
+updateSalawatDisplay();
+</script>
+</body>
+</html>
